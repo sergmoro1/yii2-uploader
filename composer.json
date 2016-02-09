@@ -1,0 +1,28 @@
+{
+    "name": "sergmoro1/yii2-byone-uploader",
+    "version": "1.0.0",
+    "description": "Widget for file upload (Blueimp, JCrop). All about uploaded files are in one model.",
+    "keywords": [
+        "yii2",
+        "file", "image",
+        "uploader", "upload"
+    ],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Morozov",
+            "email": "sergmoro1@ya.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+		"php": ">=5.4.0",
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "sergmoro1\\uploader\\": ""
+        }
+    }
+}
