@@ -41,14 +41,17 @@ class User extends ActiveRecord implements IdentityInterface
 
 </pre>
 
-Теперь User может грузить фотографии, которые будут записываться в каталоги: 
+Теперь User может грузить фотографии, которые будут записываться в каталоги:
+<pre>
   frontend/web/files/user/user_id
   frontend/web/files/user/user_id/original
   frontend/web/files/user/user_id/thumb
-  
-При этом размеры будут изменены.
+</pre>
 
-Для выполнения этих действий в форме <code>backend/views/user/_form.php</code> нужно определить widget:
+При этом размеры будут изменены так, как определено в <code>$sizes</code>.
+
+Для выполнения загрузки определите widget в форме или в любом другом представлении. 
+Например в <code>backend/views/user/_form.php</code>:
 
 <pre>
 use sergmoro1\uploader\widgets\Byone;
@@ -59,6 +62,8 @@ use sergmoro1\uploader\widgets\Byone;
     'cropAllowed' =&gt; true,
   ]) ?&gt;
 </pre>
+
+Может быть загружено любое количество файлов.
 
 <h2>Installation</h2>
 
@@ -83,9 +88,8 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
 
 <h2>Описание загружаемых файлов</h2>
 
-Очевидно, что может быть загружено любое количество файлов.
-Можно осавлять комментарии к файлам. Для этого в форме <code>backend/views/user/_form.php</code>,
-в уже упомянутом widget, нужно добавить параметр <code>appendeixView</code>:
+Можно оставлять комментарии к файлам. Для этого в форме <code>backend/views/user/_form.php</code>,
+в уже выше упомянутом widget, нужно добавить параметр <code>appendeixView</code>:
 
 <pre>
 ...
@@ -96,7 +100,8 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
   ]) ?&gt;
 </pre>
 
-И добавить представление <code>backend/views/user/appendix.php</code>
+И добавить представление, например <code>backend/views/user/appendix.php</code>
+следующего содержания:
 
 <pre>
 &lt;td id='description'&gt;
@@ -106,4 +111,3 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
 
 Поле <code>description</code> определено по умолчанию, но количество полей не ограничено.
 Если Вам необходимо добавить поле, обратитесь к автору.
-
