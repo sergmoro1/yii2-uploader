@@ -8,8 +8,10 @@
 Файлы загружаются и хранятся в каталоге <code>frontend/web/files</code>.
 Для каждой модели возможен свой подкаталог: <code>frontend/web/files/user</code> или <code>frontend/web/files/post</code>.
 В подкаталоге файлы раскладываются по пользователям или постам и размерам:
+<pre>
 <code>frontend/web/files/user</code> или <code>frontend/web/files/post/5/thumb</code>
 <code>frontend/web/files/user</code> или <code>frontend/web/files/post/5</code>
+</pre>
 
 <h2>Например</h2>
 Нужно, чтобы User мог загружать фотографии. Определим в модели <code>common/models/User</code>:
@@ -121,7 +123,7 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
 
 Поле <code>description</code> определено по умолчанию, но количество полей не ограничено.
 
-<h1><a name='en_readme_md'>Yii2 module for files|images upload</a></h1>
+<h1><a name='en_readme_md'></a>Yii2 module for files|images upload</h1>
 
 Information about all uploaded files are stored in one table - onefile. 
 There is no need to define a field of type <code>file</code> in the model, which need files.
@@ -129,8 +131,10 @@ There is no need to define a field of type <code>file</code> in the model, which
 The files are uploaded and stored in the directory <code>frontend/web/files</code>. 
 For each model subdirectories are possible: <code>frontend/web/files/user</code> or <code>frontend/web/files/uploads</code>. 
 In the subdirectory the files are arranged by users or posts and size:
+<pre>
 <code>frontend/web/files/user</code> или <code>frontend/web/files/post/5/thumb</code>
 <code>frontend/web/files/user</code> или <code>frontend/web/files/post/5</code>
+</pre>
 
 <h2>Example</h2>
 User must can upload photos. Need to be defined in a model <code>common/models/User</code>:
