@@ -28,6 +28,7 @@ class User extends ActiveRecord implements IdentityInterface
    ...
   // Images sizes
   public $sizes = [
+    // Catalog original should be define for cropping
     'original' =&gt; ['width' =&gt; 1600, 'height' =&gt; 900, 'catalog' =&gt; 'original'],
     'main' =&gt; ['width' =&gt; 400, 'height' =&gt; 400, 'catalog' =&gt; ''],
     'thumb' =&gt; ['width' =&gt; 90, 'height' =&gt; 90, 'catalog' =&gt; 'thumb'],
@@ -75,6 +76,8 @@ use sergmoro1\uploader\widgets\Byone;
     'cropAllowed' =&gt; true,
   ]) ?&gt;
 </pre>
+
+Если нужно обрезать изображение (cropAllowed = true), необходимо определить подкаталог <code>original</code>.
 
 Может быть загружено любое количество файлов.
 
@@ -152,6 +155,7 @@ class User extends ActiveRecord implements IdentityInterface
    ...
   // Images sizes
   public $sizes = [
+    // Catalog original should be define for cropping
     'original' =&gt; ['width' =&gt; 1600, 'height' =&gt; 900, 'catalog' =&gt; 'original'],
     'main' =&gt; ['width' =&gt; 400, 'height' =&gt; 400, 'catalog' =&gt; ''],
     'thumb' =&gt; ['width' =&gt; 90, 'height' =&gt; 90, 'catalog' =&gt; 'thumb'],
@@ -199,6 +203,8 @@ use sergmoro1\uploader\widgets\Byone;
     'cropAllowed' =&gt; true,
   ]) ?&gt;
 </pre>
+
+If image should be cropped (cropAllowed = true), subdirectory <code>original</code> need to be define.
 
 May be uploaded any amount of files.
 
