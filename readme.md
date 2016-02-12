@@ -14,7 +14,7 @@
 <code>frontend/web/files/user/2/original</code>
 </pre>
 
-<h2>Например</h2>
+<h2>Пример</h2>
 Нужно, чтобы User мог загружать фотографии. Определим в модели <code>common/models/User</code>:
 
 <pre>
@@ -130,7 +130,7 @@ Information about all uploaded files are stored in one table - onefile.
 There is no need to define a field of type <code>file</code> in the model, which need files.
 
 The files are uploaded and stored in the directory <code>frontend/web/files</code>. 
-For each model subdirectories are possible: <code>frontend/web/files/user</code> or <code>frontend/web/files/uploads</code>. 
+For each model subdirectories are possible: <code>frontend/web/files/user</code> or <code>frontend/web/files/post</code>. 
 In the subdirectory the files are arranged by users (or posts) and sizes:
 <pre>
 <code>frontend/web/files/user/2</code>
