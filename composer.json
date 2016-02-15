@@ -1,7 +1,7 @@
 {
     "name": "sergmoro1/yii2-byone-uploader",
     "version": "1.0.0",
-    "description": "Widget for file upload (Blueimp, JCrop). All about uploaded files are in one model.",
+    "description": "Widget for file upload (Blueimp, JCrop). Easy setup, quick start, multiple uploading.",
     "keywords": [
         "yii2",
         "file", "image",
