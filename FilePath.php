@@ -38,7 +38,10 @@ class FilePath extends Behavior
 	{
 		parent::init();
 		// change base path to frontend in any case
-		$this->base_path = str_replace('backend', 'frontend', Url::base());
+		$this->base_path = str_replace('backend', 'frontend', (Url::base() 
+			? Url::base() 
+			: Yii::$app->request->hostInfo
+		));
 	}
 
 	private function add($subdir)
