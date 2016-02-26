@@ -46,7 +46,7 @@ class User extends ActiveRecord implements IdentityInterface
   // All files for User model
   public function getFiles()
   {
-    return OneFile::find(['parent_id' =&gt; 'id'])
+    return OneFile::find()
       -&gt;where('parent_id=:parent_id AND model=:model', [
         ':parent_id' =&gt; $this-&gt;id,
         ':model' =&gt; 'common\models\User',
@@ -176,7 +176,7 @@ class User extends ActiveRecord implements IdentityInterface
   // All files for User model
   public function getFiles()
   {
-    return OneFile::find(['parent_id' =&gt; 'id'])
+    return OneFile::find()
       -&gt;where('parent_id=:parent_id AND model=:model', [
         ':parent_id' =&gt; $this-&gt;id,
         ':model' =&gt; 'common\models\User',
