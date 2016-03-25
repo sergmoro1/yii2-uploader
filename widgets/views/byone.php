@@ -3,7 +3,7 @@
  * @author - Sergey Morozov <sergmoro1@ya.ru>
  * @license - GPL
  * 
- * View for upload buttons and results of uploading.
+ * View for upload buttons and results of uploading. 
  */
 
 use Yii;
