@@ -84,8 +84,8 @@ use models\OneFile;
 </div>
 
 <!-- Uploaded files -->
-<div class='container'>
-	<div class='row'>
+<div class='row'>
+	<div class="col-lg-12">
 		<!-- Container for the uploaded files -->
 		<div id="bfiles">
 			
@@ -99,7 +99,7 @@ use models\OneFile;
 
 					<!-- image -->
 					<td>
-						<?php echo Html::img($model->getImage('thumb', $i), '', [
+						<?php echo Html::img($model->getImage('thumb', $i, $files), '', [
 							'align' => 'left',
 						]);?>
 					</td>
@@ -133,7 +133,8 @@ use models\OneFile;
 			<?php endforeach;?>
 			</table>
 		</div>  <!-- / bfiles -->
-	</div> <!-- / .row -->
-</div>
+	</div>
+</div> <!-- / .row -->
+
 
 <?php endif; ?>

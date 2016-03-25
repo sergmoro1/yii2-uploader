@@ -97,9 +97,10 @@ class FilePath extends Behavior
 	 * @var $catalog - for ex.: 'main', 'thumb' and so
 	 * @var $i - index in owner->files
 	*/
-	public function getImage($catalog = '', $i = 0)
+	public function getImage($catalog = '', $i = 0, $files = 'files')
 	{
-		$file = $this->owner->files[$i];
+		$files = $this->owner->$files;
+		$file = $files[$i];
 		if(substr($file->name, 0, 1) == 'i')
 			return $this->getFilePath($file->subdir, $catalog) . $file->name;
 		else
@@ -122,12 +123,12 @@ class FilePath extends Behavior
 		return $this->getFilePath($file->subdir, $catalog) . $file->name;
 	}
 
-	public function getImageByOriginal($original, $catalog = '')
+	public function getImageByOriginal($original, $catalog = '', $files = 'files')
 	{
-		foreach($this->owner->files as $i => $file)
+		foreach($this->owner->$files as $i => $file)
 		{
 			if(!(strpos($file->original, $original) === false))
-				return $this->getImage($catalog, $i);
+				return $this->getImage($catalog, $i, $files);
 		}
 		return false;
 	}
