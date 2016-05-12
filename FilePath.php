@@ -101,8 +101,10 @@ class FilePath extends Behavior
 	{
 		$files = $this->owner->$files;
 		$file = $files[$i];
-		if(substr($file->name, 0, 1) == 'i')
+		if($file->name && substr($file->name, 0, 1) == 'i')
 			return $this->getFilePath($file->subdir, $catalog) . $file->name;
+		elseif($file->original)
+			return $this->base_path . '/files/' . $file->original;
 		else
 			return $this->base_path . '/files/site/' . 
 				substr($file->name, strrpos($file->name, '.') + 1) . '.png';
@@ -127,7 +129,7 @@ class FilePath extends Behavior
 	{
 		foreach($this->owner->$files as $i => $file)
 		{
-			if(!(strpos($file->original, $original) === false))
+			if(!(stripos($file->original, $original) === false))
 				return $this->getImage($catalog, $i, $files);
 		}
 		return false;

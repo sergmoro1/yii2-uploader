@@ -3,7 +3,7 @@
  * @author - Sergey Morozov <sergmoro1@ya.ru>
  * @license - GPL
  * 
- * View for upload buttons and results of uploading. 
+ * View for upload buttons and results of uploading.
  */
 
 use Yii;
@@ -84,8 +84,8 @@ use models\OneFile;
 </div>
 
 <!-- Uploaded files -->
-<div class='row'>
-	<div class="col-lg-12">
+<div class='container'>
+	<div class='row'>
 		<!-- Container for the uploaded files -->
 		<div id="bfiles">
 			
@@ -99,8 +99,9 @@ use models\OneFile;
 
 					<!-- image -->
 					<td>
-						<?php echo Html::img($model->getImage('thumb', $i, $files), '', [
+						<?php echo Html::img($model->getImage('thumb', $i), [
 							'align' => 'left',
+							'width' => $model->sizes['thumb']['width'] . 'px',
 						]);?>
 					</td>
 					
@@ -133,8 +134,7 @@ use models\OneFile;
 			<?php endforeach;?>
 			</table>
 		</div>  <!-- / bfiles -->
-	</div>
-</div> <!-- / .row -->
-
+	</div> <!-- / .row -->
+</div>
 
 <?php endif; ?>
