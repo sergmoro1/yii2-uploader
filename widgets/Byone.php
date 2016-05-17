@@ -179,7 +179,7 @@ class Byone extends Widget {
         if (!isset(Yii::$app->i18n->translations['byone'])) {
             Yii::$app->i18n->translations['byone'] = [
                 'class' => 'yii\i18n\PhpMessageSource',
-                'basePath' => '@vendor/sergmoro1/uploader/messages',
+                'basePath' => '@vendor/sergmoro1/yii2-byone-uploader/messages',
                 'forceTranslation' => true,
                 'fileMap' => [
                     'byone' => 'byone.php'
