@@ -54,14 +54,17 @@ class FilePath extends Behavior
 	 * 
 	 * @var $subdir - subdirectory
 	 * It depends on a model.
-	 * It may be a User ID, but in this case user must be exist. 
+	 * It may be a User ID, but in this case user must be exists. 
 	*/
 	public function getFilePath($subdir, $catalog = '', $webroot = false)
 	{
-		return ($webroot
+		$path = ($webroot
 			? Yii::getAlias('@frontend') . '/web'
 			: $this->base_path
-		) . $this->file_path . $this->add($subdir) . $this->add($catalog);
+		) . $this->file_path . $this->add($subdir);
+		return is_dir(Yii::getAlias('@frontend') . '/web' . $this->file_path . $this->add($subdir) . $catalog) 
+			? $path . $this->add($catalog) 
+			: $path;
 	}
 
 	/* 
