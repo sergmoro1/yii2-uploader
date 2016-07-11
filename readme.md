@@ -137,7 +137,7 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
 <h1><a name='en_readme_md'></a>Yii2 module for files|images upload</h1>
 
 <h2>Demo</h2>
-<a href='http://sample.vorst.ru/photo/index'>Фото по категориям</a>.
+<a href='http://sample.vorst.ru/photo/index'>Photos by categories</a>.
 
 <h2>Advantages</h2>
 Information about all uploaded files are stored in one table - onefile. 
