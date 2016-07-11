@@ -37,11 +37,10 @@ class FilePath extends Behavior
 	public function init()
 	{
 		parent::init();
-		// change base path to frontend in any case
-		$this->base_path = str_replace('backend', 'frontend', (Url::base() 
-			? Url::base() 
-			: Yii::$app->request->hostInfo
-		));
+		// change base path to frontend
+		$this->base_path = Url::base() ? Url::base() : Yii::$app->request->hostInfo;
+		if(isset(\Yii::$app->params['before_web'])) 
+			$this->base_path = str_replace(\Yii::$app->params['before_web'], 'frontend', $this->base_path); 
 	}
 
 	private function add($subdir)
@@ -58,11 +57,13 @@ class FilePath extends Behavior
 	*/
 	public function getFilePath($subdir, $catalog = '', $webroot = false)
 	{
+		if(!($app_path = Yii::getAlias('@frontend')))
+			$app = Yii::getAlias('@app');
 		$path = ($webroot
-			? Yii::getAlias('@frontend') . '/web'
+			? $app_path . '/web'
 			: $this->base_path
 		) . $this->file_path . $this->add($subdir);
-		return is_dir(Yii::getAlias('@frontend') . '/web' . $this->file_path . $this->add($subdir) . $catalog) 
+		return is_dir($app_path . '/web' . $this->file_path . $this->add($subdir) . $catalog) 
 			? $path . $this->add($catalog) 
 			: $path;
 	}

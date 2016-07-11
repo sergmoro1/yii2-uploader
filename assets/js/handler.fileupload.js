@@ -16,17 +16,28 @@ $(function () {
 		var minFS = $(this).fileupload('option', 'minFileSize');
 		var maxFS = $(this).fileupload('option', 'maxFileSize');
 		var file = data.files[0];
+		// check count uploaded files
+		var maxFiles = $(this).fileupload('option', 'maxFiles');
+		var files_uploaded = $('table.file-table tr').length;
+		if(maxFiles != 0 && files_uploaded >= maxFiles){
+			hp.append($('<p/>')
+				.addClass('text-danger')
+				.text(editLine.options.errors.maxFiles)
+			); errors++;
+		}
 		// check file size
 		if(file.size < (minFS * 1048576) || file.size > (maxFS * 1048576)){
 			hp.append($('<p/>')
-				.text(editLine.options.errors.size + minFS + ' - ' + maxFS + 'Mb')
+				.addClass('text-danger')
+				.text(editLine.options.errors.size)
 			); errors++;
 		}
 		// check file type
 		var re = new RegExp(editLine.options.acceptFileTypes, 'i');
 		if(!re.test(file.type)){
 			hp.append($('<p/>')
-				.text(editLine.options.errors.type + /\[([\w+|{1,0}]*)\]/.exec(editLine.options.acceptFileTypes)[1])
+				.addClass('text-danger')
+				.text(editLine.options.errors.type)
 			);  errors++;
 		}
 		if(errors){

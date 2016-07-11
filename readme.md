@@ -2,10 +2,14 @@
 
 <h1>Yii2 модуль для загрузки файлов|изображений на сервер</h1>
 
+<h2>Demo</h2>
+<a href='http://sample.vorst.ru/photo/index'>Фото по категориям</a>.
+
+<h2>Преимущество</h2>
 Информация обо всех загруженных файлах хранится в одной таблице - onefile.
 Нет необходимости определять поле типа <code>file</code> в модели, которой нужны файлы.
 
-Файлы загружаются и хранятся в каталоге <code>frontend/web/files</code>.
+Файлы загружаются и хранятся в каталоге <code>app/web/files</code> (base) или <code>frontend/web/files</code> (advanced).
 Для каждой модели возможен свой подкаталог: <code>frontend/web/files/user</code> или <code>frontend/web/files/post</code>.
 В подкаталоге файлы раскладываются по пользователям (или постам) и размерам:
 <pre>
@@ -82,7 +86,7 @@ use sergmoro1\uploader\widgets\Byone;
 
 Если нужно обрезать изображение (cropAllowed = true), необходимо определить подкаталог <code>original</code>.
 
-Может быть загружено любое количество файлов.
+Может быть загружено любое количество файлов, но можно и ограничить количество задав параметр <code>maxFiles</code>.
 
 <h2>Установка</h2>
 
@@ -132,6 +136,10 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
 
 <h1><a name='en_readme_md'></a>Yii2 module for files|images upload</h1>
 
+<h2>Demo</h2>
+<a href='http://sample.vorst.ru/photo/index'>Фото по категориям</a>.
+
+<h2>Advantages</h2>
 Information about all uploaded files are stored in one table - onefile. 
 There is no need to define a field of type <code>file</code> in the model, which need files.
 
@@ -212,7 +220,7 @@ use sergmoro1\uploader\widgets\Byone;
 
 If image should be cropped (cropAllowed = true), subdirectory <code>original</code> need to be define.
 
-May be uploaded any amount of files.
+May be uploaded any amount of files but files amount can be limited by <code>maxFiles</code>.
 
 <h2>Installation</h2>
 

@@ -69,6 +69,7 @@ use models\OneFile;
 		<div class='controls'>
 			<!-- upload field -->
 			<span class="<?= $btns['choose']['class']; ?> fileinput-button" id="fileinput-button">
+				
 				<?= $btns['choose']['caption']; ?>
 				
 				<input id="<?= $blueimp['name']; ?>" name="<?= $blueimp['name']; ?>" data-url="<?= $blueimp['url']; ?>" type="file">

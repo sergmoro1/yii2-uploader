@@ -18,6 +18,8 @@ class Byone extends Widget {
 	public $model;
 	// relation name by default, for OneFile model, you can change it on your own
 	public $files = 'files';
+	// secure actions
+	public $secure = true;
 
 	// OneFile model fields
 	public $modelName;
@@ -27,6 +29,7 @@ class Byone extends Widget {
 	public $acceptFileTypes = 'image\\/[jpeg|jpg|png|gif]';
 	public $minFileSize = 0.1; // min file (FS) size in Mb 
 	public $maxFileSize = 2; // max FS in Mb
+	public $maxFiles = 0; // max count of files that can be uploaded, 0 - any
 	public $errors = [];
 	
 	// Buttons for working with uploaded files.
@@ -38,25 +41,25 @@ class Byone extends Widget {
 		],
 		'delete' => [
 			'class' => 'btn btn-danger btn-sm',
-			'action' => 'uploader/one-file/delete',
+			'action' => 'uploader/one-file-secure/delete',
 		],
 		'edit' => [
 			'class' => 'btn btn-primary btn-sm',
 		],
 		'save' => [
 			'class' => 'btn btn-success btn-sm',
-			'action' => 'uploader/one-file/save',
+			'action' => 'uploader/one-file-secure/save',
 		],
 		'cancel' => [
 			'class' => 'btn btn-default btn-sm',
 		],
 		'crop' => [
-			'action' => 'uploader/one-file/crop',
+			'action' => 'uploader/one-file-secure/crop',
 		],
 	];
 	public $barClass = 'progress-bar';
 	public $cropAllowed = false;
-	public $uploadAction = 'uploader/one-file/create';
+	public $uploadAction = 'uploader/one-file-secure/create';
 	public $appendixView = ''; 
 	
 	public $blueimp = [
@@ -71,10 +74,13 @@ class Byone extends Widget {
 
 		parent::init();
         $this->registerTranslations();
-		
+        
+        if(!$this->secure)
+			$this->uploadAction = 'uploader/one-file/create';
 		// errors of the file uploading
-		$this->errors['size'] = Yii::t('byone', 'File size too small or big! Limits: ');
-		$this->errors['type'] = Yii::t('byone', 'There is not right file type! Allowed types: ');
+		$this->errors['size'] = Yii::t('byone', 'File size can be from {minFileSize} to {maxFileSize}Mb', ['minFileSize' => $this->minFileSize, 'maxFileSize' => $this->maxFileSize]);
+		$this->errors['type'] = Yii::t('byone', 'There is not right file type! Allowed types - {acceptFileTypes}.', ['acceptFileTypes' => $this->acceptFileTypes]);
+		$this->errors['maxFiles'] = Yii::t('byone', 'Only {maxFiles} file(s) can be uploaded.', ['maxFiles' => $this->maxFiles]);
 
 		// captions of the buttons and other strings that should be translated
 		self::$defaults['choose']['label'] = Yii::t('byone', 'Photo');
@@ -85,12 +91,14 @@ class Byone extends Widget {
 		self::$defaults['save']['caption'] = Yii::t('byone', 'save');
 		self::$defaults['cancel']['caption'] = Yii::t('byone', 'cancel');
 		self::$defaults['crop']['caption'] = Yii::t('byone', 'Upload');
-
+		
 		// set buttons by widget parameters or defaults
 		foreach(self::$defaults as $name => $values) {
 			foreach($values as $property => $value)
 				if(!isset($this->btns[$name][$property]))
-					$this->btns[$name][$property] = self::$defaults[$name][$property];
+					$this->btns[$name][$property] = $property == 'action' && !$this->secure 
+						? str_replace('-secure', '', self::$defaults[$name][$property])
+						: self::$defaults[$name][$property];
 		}
 		
 		// full path server side handlers
@@ -101,6 +109,7 @@ class Byone extends Widget {
 		$this->blueimp['url'] = Url::toRoute($this->uploadAction);
 		$this->blueimp['minFileSize'] = $this->minFileSize;
 		$this->blueimp['maxFileSize'] = $this->maxFileSize;
+		$this->blueimp['maxFiles'] = $this->maxFiles;
 
 		// if model name is not set, set it
 		if(!isset($this->modelName))

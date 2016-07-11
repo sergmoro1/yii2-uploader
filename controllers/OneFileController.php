@@ -10,35 +10,10 @@ namespace sergmoro1\uploader\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use sergmoro1\uploader\models\OneFile;
 use sergmoro1\uploader\SimpleImage;
 
 class OneFileController extends Controller {
-
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['create', 'crop', 'delete', 'save'],
-                'rules' => [
-                    [
-                        'actions' => ['create', 'crop', 'delete', 'save'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
 
 	/*
 	 * Upload file, resize it if it's image by $model->sizes and save.
