@@ -4,6 +4,7 @@
 
 <h2>Demo</h2>
 <a href='http://sample.vorst.ru/photo/index'>Фото по категориям</a>.
+<a href='http://sample.vorst.ru/stout/index'>Галерея фотографий "До" и "После"</a>.
 
 <h2>Преимущество</h2>
 Информация обо всех загруженных файлах хранится в одной таблице - onefile.
@@ -109,6 +110,19 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
   ],
 </pre>
 
+Если используется шаблон <code>advanced</code>, то в параметрах соответствующей ветки
+нужно определить переменную <code>before_web</code>.
+Например в <code>backend\config\params.php</code>
+<pre>
+&lt;?php
+return [
+	'before_web' =&gt; 'backend',
+    ...
+];
+</pre>
+
+Для <code>frontend</code> или шаблона <code>basic</code> в этом нет необходимости.
+
 <h2>Описание загружаемых файлов</h2>
 
 Можно оставлять комментарии к файлам. Для этого в форме <code>backend/views/user/_form.php</code>,
@@ -134,10 +148,28 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
 
 Поле <code>description</code> определено по умолчанию, но количество полей не ограничено.
 
+<h2>Опции</h2>
+
+<code>cropAllowed</code> (false)
+Если нужно обрезать изображение, то кроме установки этого флага нужно обязательно определить
+размер 'original' в переменной <code>$sizes</code> модели.
+
+<code>acceptFileTypes</code> ('image\\/[jpeg|jpg|png|gif]')
+
+<code>minFileSize</code> (0.1Mb)
+
+<code>maxFileSize</code> (2Mb)
+
+<code>maxFiles</code> (0 - любое количество)
+
+<code>secure</code> (true)
+Обычно расширение требует, чтобы пользователь был авторизован, но можно отключить проверку.
+
 <h1><a name='en_readme_md'></a>Yii2 module for files|images upload</h1>
 
 <h2>Demo</h2>
 <a href='http://sample.vorst.ru/photo/index'>Photos by categories</a>.
+<a href='http://sample.vorst.ru/stout/index'>Photo gallery "before" & "after"</a>.
 
 <h2>Advantages</h2>
 Information about all uploaded files are stored in one table - onefile. 
@@ -243,6 +275,18 @@ To register the module in an app - <code>common/config/main.php</code>:
   ],
 </pre>
 
+If <code>advanced</code> template is used then <code>before_web</code> param should be defined.
+For example <code>backend\config\params.php</code>
+<pre>
+&lt;?php
+return [
+	'before_web' =&gt; 'backend',
+    ...
+];
+</pre>
+
+For <code>frontend</code> or <code>basic</code> template no needed.
+
 <h2>Description of uploaded files</h2>
 
 You can leave comments to the files. To do this in the form <code>backend/views/user/_form.php</code>,
@@ -267,3 +311,19 @@ the following content:
 </pre>
 
 Field <code>description</code> defined by default, but fields not limited.
+
+<h2>Options</h2>
+
+<code>cropAllowed</code> (false)
+If image should be cropped, 'original' size must be defined in <code>$sizes</code> array of the model.
+
+<code>acceptFileTypes</code> ('image\\/[jpeg|jpg|png|gif]')
+
+<code>minFileSize</code> (0.1Mb)
+
+<code>maxFileSize</code> (2Mb)
+
+<code>maxFiles</code> (0 - any amount)
+
+<code>secure</code> (true)
+Ordinary extension require user authorization, but verification may be switched off.
