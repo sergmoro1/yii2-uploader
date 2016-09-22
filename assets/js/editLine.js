@@ -122,7 +122,7 @@ editLine.addButtons = function(file_id) {
 			.append($('<a/>')
 				.addClass(editLine.options.btns.save.class)
 				.prop('id', 'btn-save')
-				.text(editLine.options.btns.save.caption)
+				.html(editLine.options.btns.save.caption)
 				.on('click', function(){
 					editLine.save(file_id);
 				})
@@ -131,7 +131,7 @@ editLine.addButtons = function(file_id) {
 			.append($('<a/>')
 				.addClass(editLine.options.btns.cancel.class)
 				.prop('id', 'btn-cancel')
-				.text(editLine.options.btns.cancel.caption)
+				.html(editLine.options.btns.cancel.caption)
 				.on('click', function(){
 					editLine.off(file_id, false);
 				})
@@ -140,7 +140,7 @@ editLine.addButtons = function(file_id) {
 			.append($('<a/>')
 				.addClass(editLine.options.btns.edit.class)
 				.prop('id', 'btn-edit')
-				.text(editLine.options.btns.edit.caption)
+				.html(editLine.options.btns.edit.caption)
 				.hide()
 				.on('click', function(){
 					editLine.on(file_id);
@@ -151,7 +151,7 @@ editLine.addButtons = function(file_id) {
 		.append($('<a/>')
 			.prop('id', 'btn-delete')
 			.addClass(editLine.options.btns.delete.class)
-			.text(editLine.options.btns.delete.caption)
+			.html(editLine.options.btns.delete.caption)
 			.hide()
 			.on('click', function(){
 				$.ajax({
@@ -304,8 +304,6 @@ $(window).load(function() {
 			// make textarea and fill in it
 			obj.append($('<textarea/>')
 				.prop('id', 'edit')
-				.css('width', '100%')
-				.css('height', '100%')
 				.prop('placeholder', editLine.defaultField.placeholder)
 				.prop('maxlength', '255')
 				.text(t)
