@@ -33,7 +33,13 @@ class FilePath extends Behavior
 	// Full path - $base_path . $file_path
 	public $base_path; // (for advanced) by default - Yii::alias('@frontend').'/web'
 	public $file_path; // example - @frontend/files/user/
+	
+	// name of files collection
+	public $files = 'files';
 
+	// current file index
+	public $current = null;
+	
 	public function init()
 	{
 		parent::init();
@@ -42,18 +48,25 @@ class FilePath extends Behavior
 		if(isset(\Yii::$app->params['before_web'])) 
 			$this->base_path = str_replace(\Yii::$app->params['before_web'], 'frontend', $this->base_path); 
 	}
+	
+	/**
+	 * Setter & getter for files
+	 */
+	public function setFiles($files) { $this->files = $files; }
+	public function getFiles() { return $this->files; }
 
-	private function add($subdir)
-	{
-		return $subdir ? $subdir . '/' : '';
-	}
+	/**
+	 * Add directory separator
+	 */
+	private function add($subdir) {	return $subdir ? $subdir . '/' : ''; }
 	
 	/* 
 	 * Get full path to file.
 	 * 
-	 * @var $subdir - subdirectory
+	 * @param $subdir - subdirectory
 	 * It depends on a model.
-	 * It may be a User ID, but in this case user must be exists. 
+	 * It may be a User ID, but in this case user must be exists.
+	 * @return full file path
 	*/
 	public function getFilePath($subdir, $catalog = '', $webroot = false)
 	{
@@ -68,10 +81,11 @@ class FilePath extends Behavior
 			: $path;
 	}
 
-	/* 
+	/**
 	 * If $path exists return $path else make it. 
 	 * 
-	 * @var $subdir - subdirectory 
+	 * @param $subdir - subdirectory
+	 * @return full path if is a success or false
 	 */
 	public function setFilePath($subdir)
 	{
@@ -93,18 +107,19 @@ class FilePath extends Behavior
 			return false;
 	}
 
-	/* 
+	/**
 	 * Get image of file. Name of image files begins with 'i', other with 'd'.
 	 * You have to make images for all file types that you want to upload with names $ext.png in /files/site/
 	 * For ex. xls: '/files/site/xls.png'
 	 * 
-	 * @var $catalog - for ex.: 'main', 'thumb' and so
-	 * @var $i - index in owner->files
+	 * @param $catalog - for ex.: 'main', 'thumb' and so
+	 * @param $i - index in owner->$files
+	 * @return full file name
 	*/
-	public function getImage($catalog = '', $i = 0, $files = 'files')
+	public function getImage($catalog = '', $i = 0)
 	{
-		$files = $this->owner->$files;
-		$file = $files[$i];
+		$files = $this->files;
+		$file = $this->owner->$files[$i];
 		if($file->name && substr($file->name, 0, 1) == 'i')
 			return $this->getFilePath($file->subdir, $catalog) . $file->name;
 		elseif($file->original)
@@ -114,6 +129,14 @@ class FilePath extends Behavior
 				substr($file->name, strrpos($file->name, '.') + 1) . '.png';
 	}
 
+	/**
+	 * Add full path to a file name
+	 * 
+	 * @param file $name 
+	 * @param $subdir to main directory/$catalog
+	 * @param $catalog in a main dirictiry for a model 
+	 * @return full file name
+	*/
 	public function getImageByName($name, $subdir, $catalog = '')
 	{
 		if(substr($name, 0, 1) == 'i')
@@ -123,27 +146,70 @@ class FilePath extends Behavior
 				substr($name, strrpos($name, '.') + 1) . '.png';
 	}
 
+	/**
+	 * Not used now
+	 */
 	public function getLink($catalog = '', $i = 0)
 	{
-		$file = $this->owner->files[$i];
+		$files = $this->files;
+		$file = $this->owner->$files[$i];
 		return $this->getFilePath($file->subdir, $catalog) . $file->name;
 	}
 
-	public function getImageByOriginal($original, $catalog = '', $files = 'files')
+	/**
+	 * Find file by original file name in a $files collection
+	 * 
+	 * @param $original file name 
+	 * @param $catalog in a main dirictiry for a model 
+	 * @return full file name
+	*/
+	public function getImageByOriginal($original, $catalog = '')
 	{
+		$files = $this->files;
 		foreach($this->owner->$files as $i => $file)
 		{
-			if(!(stripos($file->original, $original) === false))
+			if(!(stripos($file->original, $original) === false)) {
+				$this->current = $i;
 				return $this->getImage($catalog, $i, $files);
+			}
 		}
 		return false;
 	}
 	
+	/**
+	 * Each file can has some additional attributes - description by default.
+	 * 
+	 * @param $i index in a $files collection 
+	 * @return file description
+	*/
+	public function getDescription($i = 0)
+	{
+		$files = $this->files;
+		$file = $this->owner->$files[$i];
+		return isset($file->vars->description) ? $file->vars->description : "";
+	}
+
+	/**
+	 * Each file can has some additional attributes - description by default.
+	 * Current file was founded by getImageByOriginal().
+	 * 
+	 * @return file description
+	*/
+	public function getCurrentDescription()
+	{
+		$files = $this->files;
+		if(!($this->current === null)) {
+			$file = $this->owner->$files[$this->current];
+			return isset($file->vars->description) ? $file->vars->description : "";
+		}
+		return "";
+	}
+
 	/* 
 	 * Delete $file and it's thumbnail if exist.
 	 * 
-	 * @var $file - file name,
-	 * @var $subdir - subdirectory.
+	 * @param $file - file name,
+	 * @param $subdir - subdirectory.
 	*/
 	public function deleteFile($file, $subdir)
 	{
