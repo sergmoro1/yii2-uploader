@@ -119,7 +119,8 @@ class FilePath extends Behavior
 	public function getImage($catalog = '', $i = 0)
 	{
 		$files = $this->files;
-		$file = $this->owner->$files[$i];
+		$files = $this->owner->$files;
+		$file = $files[$i];
 		if($file->name && substr($file->name, 0, 1) == 'i')
 			return $this->getFilePath($file->subdir, $catalog) . $file->name;
 		elseif($file->original)
@@ -185,7 +186,8 @@ class FilePath extends Behavior
 	public function getDescription($i = 0)
 	{
 		$files = $this->files;
-		$file = $this->owner->$files[$i];
+		$files = $this->owner->$files;
+		$file = $files[$i];
 		return isset($file->vars->description) ? $file->vars->description : "";
 	}
 
@@ -199,7 +201,8 @@ class FilePath extends Behavior
 	{
 		$files = $this->files;
 		if(!($this->current === null)) {
-			$file = $this->owner->$files[$this->current];
+			$files = $this->owner->$files;
+			$file = $files[$this->current];
 			return isset($file->vars->description) ? $file->vars->description : "";
 		}
 		return "";
