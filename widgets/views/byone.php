@@ -93,6 +93,8 @@ use models\OneFile;
 			<!-- row for error messages -->
 			<div class='help-block'></div>
 
+			<div class='col-sm-12'>
+			<div class='row'>
 			<table class='file-table'>
 			<!-- table with files/images already uploaded at the time the form load -->
 			<?php foreach($model->$files as $i => $file): ?>
@@ -134,6 +136,8 @@ use models\OneFile;
 				</tr> <!-- / .row .file-row -->
 			<?php endforeach;?>
 			</table>
+			</div> <!-- / .row -->
+			</div> <!-- / .col -->
 		</div>  <!-- / bfiles -->
 	</div> <!-- / .row -->
 </div>
