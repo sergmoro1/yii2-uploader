@@ -5,7 +5,7 @@
  * Edit-line manager for OneFile model.
  * This is a type of row container for file uploading info:
  * <div id='bfiles'>
- * <table class='file-table'>
+ * <table class='table'>
  * <tr id='row_id'>
  * 	<td><img></td>
  * 	<td id='description'></td>
@@ -236,7 +236,7 @@ editLine.add = function(file){
 editLine.addFieldsAndButtons = function(file_id) {
 	if(editLine.options.appendixView)
 	{
-		var row = $('#bfiles .file-table #row-' + file_id + ' #buttons');
+		var row = $('#bfiles .table #row-' + file_id + ' #buttons');
 		for(var i = 0; i < editLine.fields.length; i++) {
 			field = editLine.fields[i];
 			row.before($('<td/>').prop('id', field.name));
@@ -257,7 +257,7 @@ editLine.addFieldsAndButtons = function(file_id) {
  * @param object file - uploaded file info
  */
 editLine.addThumbnail = function(file){
-	$('#bfiles .file-table')
+	$('#bfiles .table')
 		// file container
 		.append($('<tr/>').prop('id', 'row-' + file.id).addClass('file-row')
 			// image

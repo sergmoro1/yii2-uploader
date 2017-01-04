@@ -80,32 +80,27 @@ use models\OneFile;
 </div>
 
 <!-- The global progress bar -->
-<div id="bprogress" class="progress" style="display:none; margin-top:20px;">
+<div id='bprogress' class='progress'>
 	<div class="<?= $barClass; ?>"></div>
 </div>
 
 <!-- Uploaded files -->
-<div class='container'>
+<div class='col-sm-12'>
 	<div class='row'>
 		<!-- Container for the uploaded files -->
-		<div id="bfiles">
+		<div id='bfiles'>
 			
 			<!-- row for error messages -->
 			<div class='help-block'></div>
-
-			<div class='col-sm-12'>
-			<div class='row'>
-			<table class='file-table'>
+			
+			<table class='table'>
 			<!-- table with files/images already uploaded at the time the form load -->
 			<?php foreach($model->$files as $i => $file): ?>
 				<tr id='row-<?php echo $file->id; ?>'>
 
 					<!-- image -->
-					<td>
-						<?php echo Html::img($model->getImage('thumb', $i), [
-							'align' => 'left',
-							'width' => $model->sizes['thumb']['width'] . 'px',
-						]);?>
+					<td width='<?= $model->sizes['thumb']['width'] ?>px'>
+						<?php echo Html::img($model->getImage('thumb', $i));?>
 					</td>
 					
 					<?php if($appendixView)
@@ -136,8 +131,6 @@ use models\OneFile;
 				</tr> <!-- / .row .file-row -->
 			<?php endforeach;?>
 			</table>
-			</div> <!-- / .row -->
-			</div> <!-- / .col -->
 		</div>  <!-- / bfiles -->
 	</div> <!-- / .row -->
 </div>
