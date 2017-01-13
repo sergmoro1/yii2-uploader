@@ -18,7 +18,7 @@ $(function () {
 		var file = data.files[0];
 		// check count uploaded files
 		var maxFiles = $(this).fileupload('option', 'maxFiles');
-		var files_uploaded = $('table.file-table tr').length;
+		var files_uploaded = $('#bfiles table.table tr').length;
 		if(maxFiles != 0 && files_uploaded >= maxFiles){
 			hp.append($('<p/>')
 				.addClass('text-danger')
