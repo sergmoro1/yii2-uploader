@@ -6,7 +6,6 @@
  * View for upload buttons and results of uploading.
  */
 
-use Yii;
 use yii\helpers\Html;
 use models\OneFile;
 ?>
@@ -15,7 +14,7 @@ use models\OneFile;
 	<label class="control-label">
 		<?= $btns['choose']['label']; ?>
 	</label>
-	<p><?= Yii::t('byone', 'After saving you will be able to upload images') ?></p>
+	<p><?= \Yii::t('byone', 'After saving you will be able to upload images') ?></p>
 <?php else: ?>
 
 <?php if($cropAllowed): ?>
@@ -100,7 +99,7 @@ use models\OneFile;
 
 					<!-- image -->
 					<td width='<?= $model->sizes['thumb']['width'] ?>px'>
-						<?php echo Html::img($model->getImage('thumb', $i));?>
+						<?php echo Html::img($model->getImage('thumb', $i), ['width' => '100%']);?>
 					</td>
 					
 					<?php if($appendixView)
