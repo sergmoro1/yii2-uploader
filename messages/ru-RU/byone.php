@@ -23,6 +23,8 @@ return [
     'File size can be from {minFileSize} to {maxFileSize}Mb' => 'Размер файла может быть от {minFileSize} до {maxFileSize}Mb',
     'Only {maxFiles} file(s) can be uploaded.' => 'Только {maxFiles} файл(а|ов) может быть загружено.',
     'Photo' => 'Фото',
+	'Rows can be swapped - click, hold, drag.' => 'Строки можно перетаскивать - кликните, держите, тащите.',
+	'Swap' => 'Порядок',
     'There is not right file type! Allowed type(s) - {acceptFileTypes}.' => 'Не верный тип файла! Разрешенные тип(ы) - {acceptFileTypes}.',
     'Upload' => 'Загрузить',
 	'cancel' => 'отменить',

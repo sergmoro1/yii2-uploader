@@ -14,12 +14,13 @@ use sergmoro1\uploader\models\OneFile;
 use sergmoro1\uploader\SimpleImage;
 
 class OneFileController extends Controller {
+	const DELIMITER = '-';
 
 	/*
 	 * Upload file, resize it if it's image by $model->sizes and save.
 	 * Add new record to OneFile model.
 	 * 
-	 * POST params
+	 * POST params - $p
 	 * @var $model - model name
 	 * @var $parent_id - record of parent model that file belongs to
 	 * @var $subdir - subdirectory where file will be saved
@@ -29,61 +30,56 @@ class OneFileController extends Controller {
 	{
         if(Yii::$app->request->isAjax)
 		{
-			$modelName = Yii::$app->request->post('model');
-			$parent_id = Yii::$app->request->post('parent_id');
-			$subdir = Yii::$app->request->post('subdir');
-			$cropAllowed = Yii::$app->request->post('cropAllowed'); 
-
-			$model = $modelName::findOne($parent_id);
+			$p = Yii::$app->request->post();
+			$modelName = $p['model'];
+			$model = $modelName::findOne($p['parent_id']);
 
 			if(
-				isset($_FILES["fileupload"]) && 
+				isset($_FILES['fileupload']) && 
 				isset($model) && 
-				($path = $model->setFilePath($subdir))
+				($path = $model->setFilePath($p['subdir']))
 			)
 			{
-				$error = $_FILES["fileupload"]["error"];
-				$fileNameExt = $_FILES["fileupload"]["name"];
-				$fileSize = $_FILES["fileupload"]["size"];
-				
-				mb_internal_encoding("UTF-8");
-				$point = mb_strrpos($fileNameExt, '.');
-				$ext = mb_strtolower(mb_substr($fileNameExt, $point));
-				$fileName = mb_substr($fileNameExt, 0, $point);
-				$is_image = in_array($ext, ['.jpg', '.jpeg', '.gif', '.png']);
-				$newFileName = ($is_image ? 'i' : 'd') . '_' . uniqid();
+				$fu = $_FILES['fileupload'];
+				$is_image = strtolower(substr($fu['type'], 0, 5)) == 'image';
 
-				if(move_uploaded_file($_FILES["fileupload"]["tmp_name"], $path . $newFileName . $ext))
+				mb_internal_encoding('UTF-8');
+				$point = mb_strrpos($fu['name'], '.');
+				$ext = mb_strtolower(mb_substr($fu['name'], $point));
+				$original = mb_substr($fu['name'], 0, $point);
+				$newFile = ($is_image ? 'i' : 'd') . '_' . uniqid();
+
+				if(move_uploaded_file($fu['tmp_name'], $path . $newFile))
 				{
 					if($is_image)
 					{
 						// resizing
-						$image = new SimpleImage($path . $newFileName . $ext);
-						$image->resizeSave($path, $newFileName . $ext, $cropAllowed, $model->sizes);
+						$image = new SimpleImage($path . $newFile);
+						$image->resizeSave($path, $newFile, $p['cropAllowed'], $model->sizes);
 					} 
 
 					// add new record to oneFile model
 					$oneFile = new OneFile;
 					$oneFile->model = $modelName;
-					$oneFile->parent_id = $parent_id;
-					$oneFile->original = mb_substr($fileName, 0, 128);
-					$oneFile->name = $newFileName . $ext;
-					$oneFile->subdir = $subdir;
+					$oneFile->parent_id = $p['parent_id'];
+					$oneFile->original = mb_substr($original, 0, 128);
+					$oneFile->name = $newFile;
+					$oneFile->subdir = $p['subdir'];
 					$oneFile->save();
 					
 					// return the image and it's id that is just added
 					echo json_encode(['files' => [[
-						"name" => $oneFile->original, 
-						"url" => $model->getImageByName($newFileName . $ext, $subdir, 'original'), 
-						"thumbnailUrl" => $model->getImageByName($newFileName . $ext, $subdir, 'thumb'), 
-						"size" => $fileSize,
+						'name' => $oneFile->original, 
+						'url' => $model->getImageByName($newFile, $p['subdir'], 'original'), 
+						'thumbnailUrl' => $model->getImageByName($newFile, $p['subdir'], 'thumb'), 
+						'size' => $fu['size'],
 						'id' => $oneFile->id,
 					]]]);
 				} else
 					// error 
 					echo json_encode(['files' => [[
-						"name" => $_FILES["fileupload"]["name"], 
-						'error' => 'File: ' . $_FILES["fileupload"]["name"] . ' can\'t be loaded!',
+						'name' => $fu['name'], 
+						'error' => 'File: ' . $fu['name'] . ' can\'t be loaded!',
 					]]]);
 			 } else
 				echo 0;
@@ -157,15 +153,34 @@ class OneFileController extends Controller {
 	{
         if(Yii::$app->request->isAjax)
 		{
-			$file_id = Yii::$app->request->post('file_id');
-			$defs = Yii::$app->request->post('defs');
+			$p = Yii::$app->request->post();
 			// after find there are old values (see modules/OneFile::afterFind())
-			$model = OneFile::findOne($file_id);
-			// so, change them for new
-			$model->vars = json_decode($defs);
+			$model = OneFile::findOne($p['file_id']);
+			// so, change them for new defs (see modules/OneFile::beforeSave())
+			$model->vars = json_decode($p['defs']);
 			$model->save(false, ['defs']);
 			
-			echo $file_id;
+			echo $p['file_id'];
+        }
+	}
+
+	/*
+	 * Swap rows.
+	 * 
+	 * @var $ids - files ids
+	 */
+	public function actionSwap()
+	{
+        if(Yii::$app->request->isAjax)
+		{
+			$ids = json_decode(Yii::$app->request->post('ids'));
+			$time = time(); $j = 0;
+			for($i = 0; $i < count($ids); $i++) {
+				$model = OneFile::findOne($ids[$i]);
+				$model->created_at = $time + $i;
+				if($model->save()) $j++;
+			}
+			echo $j;
         }
 	}
 }

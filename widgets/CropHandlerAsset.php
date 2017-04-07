@@ -4,14 +4,13 @@ namespace sergmoro1\uploader\widgets;
 
 use yii\web\AssetBundle;
 
-class EditLineAsset extends AssetBundle
+class CropHandlerAsset extends AssetBundle
 {
 	public $sourcePath = '@vendor/sergmoro1/yii2-byone-uploader/assets';
 	public $css = [
-		'css/editLine.css',
 	];
 	public $js = [
-		'js/editLine.js',
+		'js/handler.Jcrop.js',
 	];
 	public $depends = [
 	];
