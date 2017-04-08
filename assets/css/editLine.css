@@ -5,24 +5,29 @@
 #bfiles {
   position: relative;
 }
-#bfiles ul.table {
+#bfiles .table {
   margin-left: 0;
   padding-left: 0;
 }
-#bfiles ul.table li {
+#bfiles .table li {
   list-style-type: none;
 }
-#bfiles ul.table li > span {
+#bfiles .table li > span {
   display: inline-block;
   padding-right: 5px;
   margin: 3px 0px; 
 }
-#bfiles ul.table li > span > img,
-#bfiles ul.table li > span > textarea,
-#bfiles ul.table li > span > input,
-#bfiles ul.table li > span > select
+#bfiles .table li > span img,
+#bfiles .table li > span textarea,
+#bfiles .table li > span input,
+#bfiles .table li > span select
 {
   vertical-align: middle;
+}
+#bfiles .table li > span input[type="checkbox"],
+#bfiles .table li > span input[type="radio"]
+{
+  margin-left: 0px;
 }
 .draggable-zone {
   position: absolute;
