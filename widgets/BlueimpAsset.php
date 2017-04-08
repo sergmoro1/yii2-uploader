@@ -6,7 +6,7 @@ use yii\web\AssetBundle;
 
 class BlueimpAsset extends AssetBundle
 {
-	public $sourcePath = '@bower/jQuery-File-Upload';
+	public $sourcePath = '@bower/jquery-file-upload';
 	public $css = [
 		'css/jquery.fileupload-ui.css',
 	];

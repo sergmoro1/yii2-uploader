@@ -6,7 +6,7 @@ use yii\web\AssetBundle;
 
 class JcropAsset extends AssetBundle
 {
-	public $sourcePath = '@bower/Jcrop';
+	public $sourcePath = '@bower/jcrop';
 	public $css = [
 		'css/jquery.Jcrop.min.css',
 	];
