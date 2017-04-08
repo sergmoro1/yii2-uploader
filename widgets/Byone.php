@@ -30,6 +30,7 @@ class Byone extends Widget {
 	public $minFileSize = 0.1; // min file (FS) size in Mb 
 	public $maxFileSize = 2; // max FS in Mb
 	public $maxFiles = 0; // max count of files that can be uploaded, 0 - any
+	public $draggable = false; 
 	public $errors = [];
 	
 	// Buttons for working with uploaded files.
@@ -40,21 +41,28 @@ class Byone extends Widget {
 			'class' => 'btn btn-default',
 		],
 		'delete' => [
+			'caption' => '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>',
 			'class' => 'btn btn-danger btn-sm',
 			'action' => 'uploader/one-file-secure/delete',
 		],
 		'edit' => [
+			'caption' => '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>',
 			'class' => 'btn btn-primary btn-sm',
 		],
 		'save' => [
+			'caption' => '<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>',
 			'class' => 'btn btn-success btn-sm',
 			'action' => 'uploader/one-file-secure/save',
 		],
 		'cancel' => [
+			'caption' => '<span class="glyphicon glyphicon-erase" aria-hidden="true"></span>',
 			'class' => 'btn btn-default btn-sm',
 		],
 		'crop' => [
 			'action' => 'uploader/one-file-secure/crop',
+		],
+		'swap' => [
+			'action' => 'uploader/one-file-secure/swap',
 		],
 	];
 	public $barClass = 'progress-bar';
@@ -85,11 +93,7 @@ class Byone extends Widget {
 		// captions of the buttons and other strings that should be translated
 		self::$defaults['choose']['label'] = Yii::t('byone', 'Photo');
 		self::$defaults['choose']['caption'] = Yii::t('byone', 'Choose a file');
-		self::$defaults['delete']['caption'] = Yii::t('byone', 'delete');
 		self::$defaults['delete']['question'] = Yii::t('byone', 'Are you shure you want to delete this element?');
-		self::$defaults['edit']['caption'] = Yii::t('byone', 'edit');
-		self::$defaults['save']['caption'] = Yii::t('byone', 'save');
-		self::$defaults['cancel']['caption'] = Yii::t('byone', 'cancel');
 		self::$defaults['crop']['caption'] = Yii::t('byone', 'Upload');
 		
 		// set buttons by widget parameters or defaults
@@ -105,6 +109,7 @@ class Byone extends Widget {
 		$this->btns['delete']['action'] = Url::toRoute($this->btns['delete']['action']);
 		$this->btns['save']['action'] = Url::toRoute($this->btns['save']['action']);
 		$this->btns['crop']['action'] = Url::toRoute($this->btns['crop']['action']);
+		$this->btns['swap']['action'] = Url::toRoute($this->btns['swap']['action']);
 		
 		$this->blueimp['url'] = Url::toRoute($this->uploadAction);
 		$this->blueimp['minFileSize'] = $this->minFileSize;
@@ -155,6 +160,10 @@ class Byone extends Widget {
 		// assets 
 		BlueimpAsset::register($this->view);
 		EditLineAsset::register($this->view);
+		if($this->draggable) {
+			JQueryUiAsset::register($this->view);
+			DraggableAsset::register($this->view);
+		}
 		if($this->cropAllowed) 
 			JcropAsset::register($this->view);
 		// plugin
@@ -176,6 +185,7 @@ class Byone extends Widget {
 			'btns' => $this->btns,
 			'blueimp' => $this->blueimp,
 			'cropAllowed' => $this->cropAllowed,
+			'draggable' => $this->draggable,
 			'appendixView' => $this->appendixView, 
 		]);
     }

@@ -5,30 +5,31 @@
  * Edit-line manager for OneFile model.
  * This is a type of row container for file uploading info:
  * <div id='bfiles'>
- * <table class='table'>
- * <tr id='row_id'>
- * 	<td><img></td>
- * 	<td id='description'></td>
+ * <ul class='table'>
+ * <li id='row_id'>
+ * 	<span><img></span>
+ * 	<span id='description'></span>
  * 	  ...
- *  <td id='buttons'>
+ *  <span id='buttons'>
  * 	  <button id='btn-edit' style='display:none;'>
  * 	  <button id='btn-cancel' style='display:none;'>
  * 	  <button id='btn-save'>
  * 	  <button id='btn-delete'>
- * 	</td>
- * </tr>
- * </table>
+ * 	</span>
+ * </li>
+ * </ul>
  * </div>
  */
 
-editLine = {
-	options: {},
-	defaultField: {
-		name: 'description',
-		placeholder: 'description'
-	},
-	fields: []
+var editLine = editLine || {
+	start: function() {}
+}
+editLine.options = {};
+editLine.defaultField = {
+	name: 'description',
+	placeholder: 'description'
 };
+editLine.fields = [];
 
 /*
  * Aditional data for file upload action.
@@ -239,7 +240,7 @@ editLine.addFieldsAndButtons = function(file_id) {
 		var row = $('#bfiles .table #row-' + file_id + ' #buttons');
 		for(var i = 0; i < editLine.fields.length; i++) {
 			field = editLine.fields[i];
-			row.before($('<td/>').prop('id', field.name));
+			row.before($('<span/>').prop('id', field.name));
 		}
 		var obj;
 		// fill in defaults and make all fields editable
@@ -259,36 +260,58 @@ editLine.addFieldsAndButtons = function(file_id) {
 editLine.addThumbnail = function(file){
 	$('#bfiles .table')
 		// file container
-		.append($('<tr/>').prop('id', 'row-' + file.id).addClass('file-row')
+		.append($('<li/>').prop('id', 'row-' + file.id).addClass('file-row')
 			// image
-			.append($('<td/>')
+			.append($('<span/>')
 				.append($('<img/>')
 					.prop('src', file.thumbnailUrl)
-					.prop('align', 'left')
+					//.prop('align', 'left')
 				)
 			)
 			// buttons cell
-			.append($('<td/>')
+			.append($('<span/>')
 				.prop('id', 'buttons')
 			)
 		);
 }
 
+/*
+ * Buttons events.
+ */
+$( function() {
+	function getRowId(obj) {
+		return obj.closest('li').attr('id').substr(4);
+	}
+	$('#bfiles .table #buttons #btn-save').click(function() {
+		editLine.save(getRowId($(this)));
+	});
+	$('#bfiles .table #buttons #btn-cancel').click(function() {
+		editLine.off(getRowId($(this)), false);
+	});
+	$('#bfiles .table #buttons #btn-edit').click(function() {
+		editLine.on(getRowId($(this)));
+	});
+	$('#bfiles .table #buttons #btn-delete').click(function() {
+		editLine.delete(getRowId($(this)));
+	});
+} );
+
+/*
+ * Add default field.
+ * In the same time this is an example how you can define new field.
+ */
 $(window).load(function() {
-	/*
-	 * Add default field.
-	 * In the same time this is an example how you can define new field.
-	 */
+
 	editLine.addField(true, {
 		name: editLine.defaultField.name,
 		save: function(id, save) {
 			var edit = $(id + ' #edit');
 			var span = $(id + ' #span');
 			if(save)
-				// copy textarea value to <td/> tag
+				// copy textarea value to <span/> tag
 				$(id).text(edit.val());
 			else
-				// copy span value to <td/> tag
+				// copy span value to <span/> tag
 				$(id).text(span.text());
 			// remove all service fields
 			edit.remove();
@@ -320,6 +343,5 @@ $(window).load(function() {
 	 * You can define aditional fields in editLine_start() if needed. 
 	 * Use editLine.addField() for each new field and re-declare editLine.data().
 	 */
-	if(editLine_start !== undefined)
-		editLine_start();
+	editLine.start();
 });

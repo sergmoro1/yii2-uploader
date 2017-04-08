@@ -65,7 +65,7 @@ use models\OneFile;
 			<?= $btns['choose']['label']; ?>
 		</label>
 		<?php endif; ?>
-		<div class='controls'>
+		<div class='controls' <?= $draggable ? 'id="draggable"' : '' ?>>
 			<!-- upload field -->
 			<span class="<?= $btns['choose']['class']; ?> fileinput-button" id="fileinput-button">
 				
@@ -89,18 +89,27 @@ use models\OneFile;
 		<!-- Container for the uploaded files -->
 		<div id='bfiles'>
 			
+			<?php if($draggable): ?>
+			<span class='draggable-zone text-right'>
+				<?= Yii::t('byone', 'Swap') ?>
+				<a href='#' title='<?= Yii::t('byone', 'Rows can be swapped - click, hold, drag.') ?>'>
+					<span class='glyphicon glyphicon-question-sign'></span>
+				</a>
+			</span>
+			<?php endif; ?>
+			
 			<!-- row for error messages -->
 			<div class='help-block'></div>
 			
-			<table class='table'>
+			<ul class='table' <?= $draggable ? 'id="sortable"' : '' ?>>
 			<!-- table with files/images already uploaded at the time the form load -->
 			<?php foreach($model->$files as $i => $file): ?>
-				<tr id='row-<?php echo $file->id; ?>'>
+				<li id='row-<?php echo $file->id; ?>'>
 
 					<!-- image -->
-					<td width='<?= $model->sizes['thumb']['width'] ?>px'>
-						<?php echo Html::img($model->getImage('thumb', $i), ['width' => '100%']);?>
-					</td>
+					<span width='<?= $model->sizes['thumb']['width'] ?>px'>
+						<?php echo Html::img($model->getImage('thumb', $i));?>
+					</span>
 					
 					<?php if($appendixView)
 						echo $this->render($appendixView, [
@@ -109,27 +118,27 @@ use models\OneFile;
 					?>
 					
 					<!-- buttons -->
-					<td id='buttons'>
+					<span id='buttons'>
 						<?php if($appendixView): ?>
-						<a id='btn-save' class='<?php echo $btns['save']['class']; ?>' onclick="editLine.save(<?php echo $file->id; ?>);" style='display:none;'>
+						<a id='btn-save' class='<?php echo $btns['save']['class']; ?>' style='display:none;' title='<?= Yii::t('byone', 'save'); ?>'>
 							<?php echo $btns['save']['caption']; ?>
 						</a>
-						<a id='btn-cancel' class='<?php echo $btns['cancel']['class']; ?>' onclick="editLine.off(<?php echo $file->id; ?>, false);" style='display:none;'>
+						<a id='btn-cancel' class='<?php echo $btns['cancel']['class']; ?>' style='display:none;' title='<?= Yii::t('byone', 'cancel'); ?>'>
 							<?php echo $btns['cancel']['caption']; ?>
 						</a>
-						<a id='btn-edit' class='<?php echo $btns['edit']['class']; ?>' onclick="editLine.on(<?php echo $file->id; ?>);" >
+						<a id='btn-edit' class='<?php echo $btns['edit']['class']; ?>' title='<?= Yii::t('byone', 'edit'); ?>'>
 							<?php echo $btns['edit']['caption']; ?>
 						</a>
 						<?php endif; ?>
 
-						<a id='btn-delete' class='<?php echo $btns['delete']['class']; ?>' onclick="editLine.delete(<?php echo $file->id; ?>);">
+						<a id='btn-delete' class='<?php echo $btns['delete']['class']; ?>' title='<?= Yii::t('byone', 'delete'); ?>'>
 							<?php echo $btns['delete']['caption']; ?>
 						</a>
-					</td>
+					</span>
 
-				</tr> <!-- / .row .file-row -->
+				</li> <!-- / #row-id -->
 			<?php endforeach;?>
-			</table>
+			</ul>
 		</div>  <!-- / bfiles -->
 	</div> <!-- / .row -->
 </div>

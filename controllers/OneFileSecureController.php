@@ -21,7 +21,7 @@ class OneFileSecureController extends OneFileController {
                 'only' => ['create', 'crop', 'delete', 'save'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'crop', 'delete', 'save'],
+                        'actions' => ['create', 'crop', 'delete', 'save', 'swap'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

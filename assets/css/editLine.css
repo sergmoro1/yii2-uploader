@@ -1,2 +1,39 @@
-#bprogress {display:none; margin-top:20px;}
-#bfiles .table tr td {border-width: 0px;}
+#bprogress {
+  display: none; 
+  margin-top: 20px;
+}
+#bfiles {
+  position: relative;
+}
+#bfiles ul.table {
+  margin-left: 0;
+  padding-left: 0;
+}
+#bfiles ul.table li {
+  list-style-type: none;
+}
+#bfiles ul.table li > span {
+  display: inline-block;
+  padding-right: 5px;
+  margin: 3px 0px; 
+}
+#bfiles ul.table li > span > img,
+#bfiles ul.table li > span > textarea,
+#bfiles ul.table li > span > input,
+#bfiles ul.table li > span > select
+{
+  vertical-align: middle;
+}
+.draggable-zone {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #999;
+}
+.draggable-zone a {
+  color: #999;
+  text-decoration: none;
+}
+.draggable-zone a:hover {
+  text-decoration: none;
+}

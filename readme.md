@@ -19,6 +19,8 @@
 <code>frontend/web/files/user/2/original</code>
 </pre>
 
+Строки с загруженными файлами можно сортировать перетаскивая строки мышкой.
+ 
 <h2>Пример</h2>
 Нужно, чтобы User мог загружать фотографии. Определим в модели <code>common/models/User</code>:
 
@@ -154,6 +156,23 @@ return [
 Если нужно обрезать изображение, то кроме установки этого флага нужно обязательно определить
 размер 'original' в переменной <code>$sizes</code> модели.
 
+<code>draggable</code> (false)
+Если необходимо менять порядок загруженных файлов, то, кроме установки данного флага, необходимо
+установить сортировку по полю <code>created_at</code> при определении геттера <code>getFiles()</code>. 
+
+<pre>
+  public function getFiles()
+  {
+    return OneFile::find()
+      -&gt;where('parent_id=:parent_id AND model=:model', [
+        ':parent_id' =&gt; $this-&gt;id,
+        ':model' =&gt; 'common\models\YourModel',
+       ])
+      -&gt;orderBy('created_at')
+      -&gt;all();
+  }
+</pre>
+
 <code>acceptFileTypes</code> ('image\\/[jpeg|jpg|png|gif]')
 
 <code>minFileSize</code> (0.1Mb)
@@ -183,6 +202,8 @@ In the subdirectory the files are arranged by users (or posts) and sizes:
 <code>frontend/web/files/user/2/thumb</code>
 <code>frontend/web/files/user/2/original</code>
 </pre>
+
+Rows with uploaded files can be sorted dragging the rows with the mouse.
 
 <h2>Example</h2>
 User must can upload photos. Need to be defined in a model <code>common/models/User</code>:
@@ -316,6 +337,22 @@ Field <code>description</code> defined by default, but fields not limited.
 
 <code>cropAllowed</code> (false)
 If image should be cropped, 'original' size must be defined in <code>$sizes</code> array of the model.
+
+<code>draggable</code> (false)
+If uploaded files should be swapped then in a getter <code>getFiles()</code> rows must be sorted by <code>created_at</code>. 
+
+<pre>
+  public function getFiles()
+  {
+    return OneFile::find()
+      -&gt;where('parent_id=:parent_id AND model=:model', [
+        ':parent_id' =&gt; $this-&gt;id,
+        ':model' =&gt; 'common\models\YourModel',
+       ])
+      -&gt;orderBy('created_at')
+      -&gt;all();
+  }
+</pre>
 
 <code>acceptFileTypes</code> ('image\\/[jpeg|jpg|png|gif]')
 
