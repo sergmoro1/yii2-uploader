@@ -168,7 +168,6 @@ return [
         ':parent_id' =&gt; $this-&gt;id,
         ':model' =&gt; 'common\models\YourModel',
        ])
-      // only if rows should be draggable & sortable
       -&gt;orderBy('created_at') 
       -&gt;all();
   }
