@@ -1,5 +1,6 @@
 <script>
-editLine_start = function() {
+var editLine = editLine || {};
+editLine.start = function() {
 	// Re-declare defaults
 	editLine.data = function(file_id) {
 		var row_id = '#row-' + file_id;
@@ -80,6 +81,7 @@ editLine_start = function() {
 /* @var $model sample\models\Stout */
 
 use sergmoro1\uploader\widgets\Byone;
+
 ?>
 
 <div class="stout-update">
@@ -91,6 +93,7 @@ use sergmoro1\uploader\widgets\Byone;
 		'maxFiles' => 4,
 		'appendixView' => '/stout/appendix',
 		'cropAllowed' => true,
+		'draggable' => true,
 	]) ?>
 
 </div>

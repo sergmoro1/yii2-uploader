@@ -8,10 +8,10 @@
  */
 ?>
 
-<td id='when'>
+<span id='when'>
 	<?= isset($file->vars->when) ? ($file->vars->when ? 'after' : 'before') : 'before' ?>
-</td>
+</span>
 
-<td id='description'>
+<span id='description'>
 	<?= isset($file->vars->description) ? $file->vars->description : '' ?>
-</td>
+</span>

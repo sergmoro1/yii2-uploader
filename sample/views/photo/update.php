@@ -3,6 +3,7 @@
 /* @var $model sample\models\Photo */
 
 use sergmoro1\uploader\widgets\Byone;
+
 ?>
 
 <div class="photo-update">
@@ -14,6 +15,7 @@ use sergmoro1\uploader\widgets\Byone;
 		'maxFiles' => 5,
 		'appendixView' => '/photo/appendix',
 		'cropAllowed' => true,
+		'draggable' => true,
 	]) ?>
 
 </div>

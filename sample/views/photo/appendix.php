@@ -8,6 +8,6 @@
  */
 ?>
 
-<td id='description'>
+<span id='description'>
 	<?php echo isset($file->vars->description) ? $file->vars->description : ''; ?>
-</td>
+</span>
