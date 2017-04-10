@@ -142,9 +142,9 @@ And add view, for ex. <code>backend/views/user/appendix.php</code>
 the following content:
 
 <pre>
-&lt;td id='description'&gt;
+&lt;span id='description'&gt;
 	&lt;?php echo isset($file-&gt;vars-&gt;description) ? $file-&gt;vars-&gt;description : ''; ?&gt;
-&lt;/td&gt;
+&lt;/span&gt;
 </pre>
 
 Field <code>description</code> defined by default, but fields not limited.

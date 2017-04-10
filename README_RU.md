@@ -143,9 +143,9 @@ return [
 следующего содержания:
 
 <pre>
-&lt;td id='description'&gt;
+&lt;span id='description'&gt;
 	&lt;?php echo isset($file-&gt;vars-&gt;description) ? $file-&gt;vars-&gt;description : ''; ?&gt;
-&lt;/td&gt;
+&lt;/span&gt;
 </pre>
 
 Поле <code>description</code> определено по умолчанию, но количество полей не ограничено.
