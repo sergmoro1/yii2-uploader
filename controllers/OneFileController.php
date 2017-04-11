@@ -167,20 +167,20 @@ class OneFileController extends Controller {
 	/*
 	 * Swap rows.
 	 * 
-	 * @var $ids - files ids
+	 * @var $b, a - files ids that should be swapped with each other
 	 */
 	public function actionSwap()
 	{
         if(Yii::$app->request->isAjax)
 		{
-			$ids = json_decode(Yii::$app->request->post('ids'));
-			$time = time(); $j = 0;
-			for($i = 0; $i < count($ids); $i++) {
-				$model = OneFile::findOne($ids[$i]);
-				$model->created_at = $time + $i;
-				if($model->save()) $j++;
-			}
-			echo $j;
+			$p = Yii::$app->request->post();
+			$model_b = OneFile::findOne($p['b']);
+			$model_a = OneFile::findOne($p['a']);
+			// swap
+			$temp = $model_a->created_at;
+			$model_a->created_at = $model_b->created_at;
+			$model_b->created_at = $temp;
+			echo $model_a->save(false, ['created_at']) && $model_b->save(false, ['created_at']);
         }
 	}
 }

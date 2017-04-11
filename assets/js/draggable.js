@@ -9,7 +9,7 @@ $( function() {
 			if(id = row.id.substr(4))
 				a[i++] = id;
 		});
-		return JSON.stringify(a);
+		return a;
 	}
 	$( "#sortable" ).sortable({
 		revert: true,
@@ -17,14 +17,21 @@ $( function() {
 			before = getRowsIds();
 		},
 		update: function( event, ui ) {
-			after = getRowsIds();
-			if(before != after) {
+			after = getRowsIds(); 
+			var i, swapped = false;
+			for(i = 0; i < before.length; i++) {
+				if(before[i] != after[i]) {
+					swapped = true;
+					break;
+				}
+			}
+			if(swapped) {
 				// save new order
 				$.ajax({
 					method: "POST",
 					url: editLine.options.btns.swap.action,
-					data: {ids: after},
-					success: function(id, status, xhr) {}
+					data: {b: before[i], a: after[i]},
+					success: function(data, status, xhr) {},
 				});
 			}
 		}
