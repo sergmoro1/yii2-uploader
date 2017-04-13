@@ -1,10 +1,29 @@
 <h1>Yii2 module for files|images upload</h1>
 
 <h2>Demo</h2>
-<a href='http://sample.vorst.ru/photo/index'>Photos by categories</a>.
-<a href='http://sample.vorst.ru/stout/index'>Photo gallery "before" & "after"</a>.
+<a href='http://sample.vorst.ru/photo/index'>Photos by categories</a>. (when editing) <br>
+<a href='http://sample.vorst.ru/stout/index'>Photo gallery "before" & "after"</a> (similarly).
 
 <h2>Advantages</h2>
+
+If the model needs files, you don't need:
+<ul>
+  <li>define attribute <code>file</code> in a model,</li>
+  <li>to process the result of filling the form,</li>
+  <li>to come up with where save files,</li>
+</ul>
+
+You can:
+<ul>
+  <li>you can add a description to the file,</li>
+  <li>delete no needed files,</li>
+  <li>define sizes to compress images,</li>
+  <li>crop images,</li>
+  <li>swap file rows by mouse.</li>
+</ul>
+
+<h2>How it's made?</h2>
+
 Information about all uploaded files are stored in one table - onefile. 
 There is no need to define a field of type <code>file</code> in the model, which need files.
 
