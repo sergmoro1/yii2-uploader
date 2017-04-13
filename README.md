@@ -15,11 +15,11 @@ If the model needs files, you don't need:
 
 You can:
 <ul>
-  <li>you can add a description to the file,</li>
+  <li>add a description to the file,</li>
   <li>delete no needed files,</li>
   <li>define sizes to compress images,</li>
   <li>crop images,</li>
-  <li>swap file rows by mouse.</li>
+  <li>swap files rows by mouse.</li>
 </ul>
 
 <h2>How it's made?</h2>
