@@ -300,7 +300,7 @@ $( function() {
  * Add default field.
  * In the same time this is an example how you can define new field.
  */
-$(window).load(function() {
+$(window).on('load', function() {
 
 	editLine.addField(true, {
 		name: editLine.defaultField.name,

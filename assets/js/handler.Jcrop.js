@@ -8,7 +8,7 @@
 var jcrop_api;
 var cropBox;
 
-window.onload = function() {
+$(window).on('load', function() {
 	cropBox = $("#cropBox");
 }
 
