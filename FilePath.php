@@ -120,14 +120,17 @@ class FilePath extends Behavior
 	{
 		$files = $this->files;
 		$files = $this->owner->$files;
-		$file = $files[$i];
-		if($file->name && substr($file->name, 0, 1) == 'i')
-			return $this->getFilePath($file->subdir, $catalog) . $file->name;
-		elseif($file->original)
-			return $this->base_path . '/files/' . $file->original;
-		else
-			return $this->base_path . '/files/site/' . 
-				substr($file->name, strrpos($file->name, '.') + 1) . '.png';
+		if(isset($files[$i])) {
+			$file = $files[$i];
+			if($file->name && substr($file->name, 0, 1) == 'i')
+				return $this->getFilePath($file->subdir, $catalog) . $file->name;
+			elseif($file->original)
+				return $this->base_path . '/files/' . $file->original;
+			else
+				return $this->base_path . '/files/site/' . 
+					substr($file->name, strrpos($file->name, '.') + 1) . '.png';
+		} else
+			return false;
 	}
 
 	/**
