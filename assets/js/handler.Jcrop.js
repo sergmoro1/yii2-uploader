@@ -10,7 +10,7 @@ var cropBox;
 
 $(window).on('load', function() {
 	cropBox = $("#cropBox");
-}
+});
 
 /*
  * Delete file and no more needed field and clear cropBox properties.
