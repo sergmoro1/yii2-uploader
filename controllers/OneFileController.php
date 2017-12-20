@@ -47,7 +47,7 @@ class OneFileController extends Controller {
 				$point = mb_strrpos($fu['name'], '.');
 				$ext = mb_strtolower(mb_substr($fu['name'], $point));
 				$original = mb_substr($fu['name'], 0, $point);
-				$newFile = ($is_image ? 'i' : 'd') . '_' . uniqid();
+				$newFile = ($is_image ? 'i' : 'd') . '_' . uniqid() . $ext;
 
 				if(move_uploaded_file($fu['tmp_name'], $path . $newFile))
 				{
