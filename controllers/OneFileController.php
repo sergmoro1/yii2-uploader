@@ -109,13 +109,16 @@ class OneFileController extends Controller {
 			$file = $oneFile->name;
 			// load original image
 			$image = new SimpleImage($path . 'original/' . $file);
+			// crop
 			$image->crop($w, $h, $x, $y);
-			// crop and save exclude original
-			$image->resizeSave($path, $file, false, array_filter(
-				$model->sizes, 
-				function($key) { return $key <> 'original'; }, 
-				ARRAY_FILTER_USE_KEY
-			));
+			// exclude original
+			$sizes = [];
+			foreach($model->sizes as $type => $params) {
+				if($type <> 'original')
+				$sizes[$type] = $params;
+			}
+			// resize
+			$image->resizeSave($path, $file, false, $sizes);
 
 			// return the image and it's id that you just added
 			echo json_encode(['files' => [[
