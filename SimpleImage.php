@@ -46,36 +46,29 @@ class SimpleImage {
 		}
 	}
 	
-	function resizeSave($path, $file, $cropAllowed=false, $params=array(
-		'main'=>array('width'=>480, 'height'=>360, 'catalog'=>''),
-		'thumb'=>array('width'=>120, 'height'=>90, 'catalog'=>'thumb'),
+	function resizeSave($path, $file, $params=array(
+		'main'=>array('width'=>480, 'height'=>320, 'catalog'=>''),
+		'thumb'=>array('width'=>120, 'height'=>80, 'catalog'=>'thumb'),
 	))
 	{
 		$wGTh = $this->getWidth() - $this->getHeight();
 		
 		foreach($params as $place => $param)
 		{
-			if($place <> 'original' || $cropAllowed)
+			$square = $param['width'] == $param['height'];
+			if($param['width']>0 && $param['height']>0)
 			{
-				$square = $param['width'] == $param['height'];
-				if($param['width']>0 && $param['height']>0)
+				if($wGTh>0)
 				{
-					if($wGTh>0)
-					{
-						if($cropAllowed)
-							$this->resizeToHeight($param['width']);
-						elseif($square)
-							$this->resizeToHeight($param['height'], true);
-						else
-							$this->resizeToWidth($param['width']);
-					} else {
-						if($cropAllowed)
-							$this->resizeToWidth($param['height']);
-						elseif($square)
-							$this->resizeToWidth($param['width'], true);
-						else
-							$this->resizeToHeight($param['height']);
-					}
+					if($square)
+						$this->resizeToHeight($param['height'], true);
+					else
+						$this->resizeToWidth($param['width']);
+				} else {
+					if($square)
+						$this->resizeToWidth($param['width'], true);
+					else
+						$this->resizeToHeight($param['height']);
 				}
 			}
 			if($param['catalog'] && !is_dir($path . $param['catalog']))

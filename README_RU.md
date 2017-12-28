@@ -50,10 +50,11 @@ class User extends ActiveRecord implements IdentityInterface
    ...
   // Images sizes
   public $sizes = [
-    // Catalog original should be define for cropping
-    'original' =&gt; ['width' =&gt; 1600, 'height' =&gt; 900, 'catalog' =&gt; 'original'],
+    // Catalog original should be defined to keep image for cropping
+    'original' =&gt; ['width' =&gt; 3600, 'height' =&gt; 2400, 'catalog' =&gt; 'original'],
+    // Catalog main should be defined always
     'main' =&gt; ['width' =&gt; 400, 'height' =&gt; 400, 'catalog' =&gt; ''],
-    'thumb' =&gt; ['width' =&gt; 90, 'height' =&gt; 90, 'catalog' =&gt; 'thumb'],
+    'thumb' =&gt; ['width' =&gt; 120, 'height' =&gt; 80, 'catalog' =&gt; 'thumb'],
   ];
   // Get ref to the file, make dir and so
   public function behaviors()
@@ -105,6 +106,16 @@ use sergmoro1\uploader\widgets\Byone;
 </pre>
 
 Если нужно обрезать изображение (cropAllowed = true), необходимо определить подкаталог <code>original</code>.
+Соотношение сторон для обрезания задается подкаталогом <code>main</code>. По умолчанию обрезается только изображение в подкаталоге
+<code>main</code>, но можно указать и любой другой подкаталог (кроме <code>original</code>) определив парметр <code>crop</code>.
+
+<pre>
+  public $sizes = [
+    'original' =&gt; ['width' =&gt; 3600, 'height' =&gt; 2400, 'catalog' =&gt; 'original'],
+    'main' =&gt; ['width' =&gt; 400, 'height' =&gt; 400, 'catalog' =&gt; ''],
+    'thumb' =&gt; ['width' =&gt; 120, 'height' =&gt; 80, 'catalog' =&gt; 'thumb', 'crop' =&gt; true],
+  ];
+</pre> 
 
 Может быть загружено любое количество файлов, но можно и ограничить количество задав параметр <code>maxFiles</code>.
 

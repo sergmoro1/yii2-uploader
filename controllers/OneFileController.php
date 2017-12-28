@@ -55,7 +55,7 @@ class OneFileController extends Controller {
 					{
 						// resizing
 						$image = new SimpleImage($path . $newFile);
-						$image->resizeSave($path, $newFile, $p['cropAllowed'], $model->sizes);
+						$image->resizeSave($path, $newFile, $model->sizes);
 					} 
 
 					// add new record to oneFile model
@@ -111,14 +111,14 @@ class OneFileController extends Controller {
 			$image = new SimpleImage($path . 'original/' . $file);
 			// crop
 			$image->crop($w, $h, $x, $y);
-			// exclude original
+			// choice images with type main or with param crop = true
 			$sizes = [];
 			foreach($model->sizes as $type => $params) {
-				if($type <> 'original')
-				$sizes[$type] = $params;
+				if($type == 'main' || (isset($params['crop']) && $params['crop']))
+					$sizes[$type] = $params;
 			}
-			// resize
-			$image->resizeSave($path, $file, false, $sizes);
+			// resize & save
+			$image->resizeSave($path, $file, $sizes);
 
 			// return the image and it's id that you just added
 			echo json_encode(['files' => [[

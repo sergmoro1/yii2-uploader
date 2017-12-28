@@ -107,6 +107,17 @@ use sergmoro1\uploader\widgets\Byone;
 </pre>
 
 If image should be cropped (cropAllowed = true), subdirectory <code>original</code> need to be define.
+The aspect ratio for cropping is set on <code>main</code> subdirectory. 
+By default, only <code>main</code> image will be cropped, but you can specify any other directory (except <code>original</code>) 
+by defining the parameter <code>crop</code>.
+
+<pre>
+  public $sizes = [
+    'original' =&gt; ['width' =&gt; 3600, 'height' =&gt; 2400, 'catalog' =&gt; 'original'],
+    'main' =&gt; ['width' =&gt; 400, 'height' =&gt; 400, 'catalog' =&gt; ''],
+    'thumb' =&gt; ['width' =&gt; 120, 'height' =&gt; 80, 'catalog' =&gt; 'thumb', 'crop' =&gt; true],
+  ];
+</pre> 
 
 May be uploaded any amount of files but files amount can be limited by <code>maxFiles</code>.
 
