@@ -14,6 +14,12 @@ use yii\web\View;
 use yii\helpers\Url;
 use yii\base\NotSupportedException;
 
+use sergmoro1\uploader\bundles\BlueimpAsset;
+use sergmoro1\uploader\bundles\EditLineAsset;
+use sergmoro1\uploader\bundles\JQueryUiAsset;
+use sergmoro1\uploader\bundles\DraggableAsset;
+use sergmoro1\uploader\bundles\JcropAsset;
+
 class Byone extends Widget {
 	public $model;
 	// relation name by default, for OneFile model, you can change it on your own

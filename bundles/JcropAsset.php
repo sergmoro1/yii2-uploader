@@ -15,6 +15,6 @@ class JcropAsset extends AssetBundle
 	];
 	public $depends = [
 		'yii\web\YiiAsset',
-		'sergmoro1\uploader\widgets\CropHandlerAsset',
+		'sergmoro1\uploader\bundles\CropHandlerAsset',
 	];
 }

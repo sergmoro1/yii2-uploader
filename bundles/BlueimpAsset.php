@@ -17,6 +17,6 @@ class BlueimpAsset extends AssetBundle
 	];
 	public $depends = [
 		'yii\web\YiiAsset',
-		'sergmoro1\uploader\widgets\FileHandlerAsset',
+		'sergmoro1\uploader\bundles\FileHandlerAsset',
 	];
 }
