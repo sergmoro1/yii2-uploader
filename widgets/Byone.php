@@ -43,7 +43,7 @@ class Byone extends Widget {
 		'delete' => [
 			'caption' => '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>',
 			'class' => 'btn btn-danger btn-sm',
-			'action' => 'uploader/one-file-secure/delete',
+			'action' => '/uploader/one-file-secure/delete',
 		],
 		'edit' => [
 			'caption' => '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>',
@@ -52,22 +52,22 @@ class Byone extends Widget {
 		'save' => [
 			'caption' => '<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>',
 			'class' => 'btn btn-success btn-sm',
-			'action' => 'uploader/one-file-secure/save',
+			'action' => '/uploader/one-file-secure/save',
 		],
 		'cancel' => [
 			'caption' => '<span class="glyphicon glyphicon-erase" aria-hidden="true"></span>',
 			'class' => 'btn btn-default btn-sm',
 		],
 		'crop' => [
-			'action' => 'uploader/one-file-secure/crop',
+			'action' => '/uploader/one-file-secure/crop',
 		],
 		'swap' => [
-			'action' => 'uploader/one-file-secure/swap',
+			'action' => '/uploader/one-file-secure/swap',
 		],
 	];
 	public $barClass = 'progress-bar';
 	public $cropAllowed = false;
-	public $uploadAction = 'uploader/one-file-secure/create';
+	public $uploadAction = '/uploader/one-file-secure/create';
 	public $appendixView = ''; 
 	
 	public $blueimp = [
@@ -84,7 +84,7 @@ class Byone extends Widget {
         $this->registerTranslations();
         
         if(!$this->secure)
-			$this->uploadAction = 'uploader/one-file/create';
+			$this->uploadAction = '/uploader/one-file/create';
 		// errors of the file uploading
 		$this->errors['size'] = Yii::t('byone', 'File size can be from {minFileSize} to {maxFileSize}Mb', ['minFileSize' => $this->minFileSize, 'maxFileSize' => $this->maxFileSize]);
 		$this->errors['type'] = Yii::t('byone', 'There is not right file type! Allowed types - {acceptFileTypes}.', ['acceptFileTypes' => $this->acceptFileTypes]);
