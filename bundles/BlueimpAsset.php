@@ -1,6 +1,6 @@
 <?php
 
-namespace sergmoro1\uploader\widgets;
+namespace sergmoro1\uploader\bundles;
 
 use yii\web\AssetBundle;
 
