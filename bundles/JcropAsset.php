@@ -8,10 +8,10 @@ class JcropAsset extends AssetBundle
 {
 	public $sourcePath = '@vendor/bower-asset/jcrop';
 	public $css = [
-		'css/jquery.Jcrop.min.css',
+		'css/Jcrop.min.css',
 	];
 	public $js = [
-		'js/jquery.Jcrop.min.js',
+		'js/Jcrop.min.js',
 	];
 	public $depends = [
 		'yii\web\YiiAsset',
