@@ -190,6 +190,8 @@ class FilePath extends Behavior
 	{
 		$files = $this->files;
 		$files = $this->owner->$files;
+		if(!isset($files[$i]))
+		   return "";
 		$file = $files[$i];
 		return isset($file->vars->description) ? $file->vars->description : "";
 	}
