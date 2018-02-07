@@ -33,8 +33,8 @@ class Byone extends Widget {
 	public $subdir;
 
 	public $acceptFileTypes = 'image\\/[jpeg|jpg|png|gif]';
-	public $minFileSize = 0.1; // min file (FS) size in Mb 
-	public $maxFileSize = 2; // max FS in Mb
+	public $minFileSize = null; // min file (FS) size in Mb 
+	public $maxFileSize = null; // max FS in Mb
 	public $maxFiles = 0; // max count of files that can be uploaded, 0 - any
 	public $draggable = false; 
 	public $errors = [];
@@ -118,8 +118,16 @@ class Byone extends Widget {
 		$this->btns['swap']['action'] = Url::toRoute($this->btns['swap']['action']);
 		
 		$this->blueimp['url'] = Url::toRoute($this->uploadAction);
+		
+		// set min & max file sizes
+		if(is_null($this->minFileSize))
+			$this->minFileSize = isset(\Yii::$app->params['fileSize']['min']) ? \Yii::$app->params['fileSize']['min'] : 0.01;
 		$this->blueimp['minFileSize'] = $this->minFileSize;
+		if(is_null($this->maxFileSize))
+			$this->maxFileSize = isset(\Yii::$app->params['fileSize']['max']) ? \Yii::$app->params['fileSize']['max'] : 2;
 		$this->blueimp['maxFileSize'] = $this->maxFileSize;
+		
+		// max files that can be uploaded
 		$this->blueimp['maxFiles'] = $this->maxFiles;
 
 		// if model name is not set, set it
