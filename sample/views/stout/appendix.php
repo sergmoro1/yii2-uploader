@@ -9,9 +9,9 @@
 ?>
 
 <span id='when'>
-	<?= isset($file->vars->when) ? ($file->vars->when ? 'after' : 'before') : 'before' ?>
+    <?= isset($file->vars->when) ? ($file->vars->when ? 'after' : 'before') : 'before' ?>
 </span>
 
 <span id='description'>
-	<?= isset($file->vars->description) ? $file->vars->description : '' ?>
+    <?= isset($file->vars->description) ? $file->vars->description : '' ?>
 </span>

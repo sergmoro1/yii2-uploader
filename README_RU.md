@@ -146,7 +146,7 @@ $ php yii migrate --migrationPath=@vendor/sergmoro1/yii2-byone-uploader/migratio
 <pre>
 &lt;?php
 return [
-	'before_web' =&gt; 'backend',
+    'before_web' =&gt; 'backend',
     ...
 ];
 </pre>
@@ -172,7 +172,7 @@ return [
 
 <pre>
 &lt;span id='description'&gt;
-	&lt;?php echo isset($file-&gt;vars-&gt;description) ? $file-&gt;vars-&gt;description : ''; ?&gt;
+    &lt;?php echo isset($file-&gt;vars-&gt;description) ? $file-&gt;vars-&gt;description : ''; ?&gt;
 &lt;/span&gt;
 </pre>
 

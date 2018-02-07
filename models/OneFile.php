@@ -22,45 +22,45 @@ use yii\db\ActiveRecord;
 
 class OneFile extends ActiveRecord
 {
-	public $vars;
-	/**
-	 * @return string the associated database table name
-	 */
-	public static function tableName()
-	{
-		return '{{%onefile}}';
-	}
+    public $vars;
+    /**
+     * @return string the associated database table name
+     */
+    public static function tableName()
+    {
+        return '{{%onefile}}';
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		return [
-			[['model', 'parent_id', 'name'], 'required'],
-			['parent_id', 'integer'],
-			[['model', 'original'], 'string', 'max' => 128],
-			['name', 'string', 'max' => 32],
-			[['defs', 'created_at'], 'safe'],
-		];
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules()
+    {
+        return [
+            [['model', 'parent_id', 'name'], 'required'],
+            ['parent_id', 'integer'],
+            [['model', 'original'], 'string', 'max' => 128],
+            ['name', 'string', 'max' => 32],
+            [['defs', 'created_at'], 'safe'],
+        ];
+    }
 
-	public function afterFind()
-	{
-		parent::afterFind();
-		$this->vars = json_decode($this->defs);
-	}
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->vars = json_decode($this->defs);
+    }
 
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert))
-		{
-			if($this->isNewRecord)
-				$this->created_at = time();
-			$this->defs = json_encode($this->vars);
-			return true;
-		}
-		else
-			return false;
-	}
+    public function beforeSave($insert)
+    {
+        if(parent::beforeSave($insert))
+        {
+            if($this->isNewRecord)
+                $this->created_at = time();
+            $this->defs = json_encode($this->vars);
+            return true;
+        }
+        else
+            return false;
+    }
 }

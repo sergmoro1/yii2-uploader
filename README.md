@@ -147,7 +147,7 @@ For example <code>backend\config\params.php</code>
 <pre>
 &lt;?php
 return [
-	'before_web' =&gt; 'backend',
+    'before_web' =&gt; 'backend',
     ...
 ];
 </pre>
@@ -173,7 +173,7 @@ the following content:
 
 <pre>
 &lt;span id='description'&gt;
-	&lt;?php echo isset($file-&gt;vars-&gt;description) ? $file-&gt;vars-&gt;description : ''; ?&gt;
+    &lt;?php echo isset($file-&gt;vars-&gt;description) ? $file-&gt;vars-&gt;description : ''; ?&gt;
 &lt;/span&gt;
 </pre>
 

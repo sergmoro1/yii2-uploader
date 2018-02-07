@@ -9,5 +9,5 @@
 ?>
 
 <span id='description'>
-	<?php echo isset($file->vars->description) ? $file->vars->description : ''; ?>
+    <?php echo isset($file->vars->description) ? $file->vars->description : ''; ?>
 </span>
