@@ -91,6 +91,13 @@ class Byone extends Widget {
         
         if(!$this->secure)
 			$this->uploadAction = '/uploader/one-file/create';
+
+		// set min & max file sizes
+		if(is_null($this->minFileSize))
+			$this->minFileSize = isset(\Yii::$app->params['fileSize']['min']) ? \Yii::$app->params['fileSize']['min'] : 0.01;
+		if(is_null($this->maxFileSize))
+			$this->maxFileSize = isset(\Yii::$app->params['fileSize']['max']) ? \Yii::$app->params['fileSize']['max'] : 2;
+
 		// errors of the file uploading
 		$this->errors['size'] = Yii::t('byone', 'File size can be from {minFileSize} to {maxFileSize}Mb', ['minFileSize' => $this->minFileSize, 'maxFileSize' => $this->maxFileSize]);
 		$this->errors['type'] = Yii::t('byone', 'There is not right file type! Allowed types - {acceptFileTypes}.', ['acceptFileTypes' => $this->acceptFileTypes]);
@@ -119,12 +126,7 @@ class Byone extends Widget {
 		
 		$this->blueimp['url'] = Url::toRoute($this->uploadAction);
 		
-		// set min & max file sizes
-		if(is_null($this->minFileSize))
-			$this->minFileSize = isset(\Yii::$app->params['fileSize']['min']) ? \Yii::$app->params['fileSize']['min'] : 0.01;
 		$this->blueimp['minFileSize'] = $this->minFileSize;
-		if(is_null($this->maxFileSize))
-			$this->maxFileSize = isset(\Yii::$app->params['fileSize']['max']) ? \Yii::$app->params['fileSize']['max'] : 2;
 		$this->blueimp['maxFileSize'] = $this->maxFileSize;
 		
 		// max files that can be uploaded
