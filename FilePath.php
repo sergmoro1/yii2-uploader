@@ -24,6 +24,7 @@ use Yii;
 use yii\base\Behavior;
 use yii\base\NotSupportedException;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 class FilePath extends Behavior
 {
