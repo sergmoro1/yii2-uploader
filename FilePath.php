@@ -243,4 +243,18 @@ class FilePath extends Behavior
             ? $this->owner->sizes['main']['width'] / $this->owner->sizes['main']['height']
             : 16 / 9;
     }
+    
+   	public function prepareSlider($caption = false)
+	{
+        $files = $this->files;
+		$items = [];
+		foreach($this->owner->$files as $i => $file)
+		{
+			$item['content'] = '<p class="text-center">'. Html::img($this->getImage('', $i), ['style' => 'width: 100%;']) .'</p>';
+			if($caption)
+				$item['caption'] = $this->getDescription($i);
+			$items[] = $item;
+		}
+		return $items;
+	}
 }
