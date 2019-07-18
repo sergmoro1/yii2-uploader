@@ -1,11 +1,12 @@
 {
-    "name": "sergmoro1/yii2-byone-uploader",
-    "version": "2.0.0",
-    "description": "Widget for file upload. Using Blueimp and JCrop jQuery plugins. Easy setup, quick start.",
+    "name": "sergmoro1/yii2-uploader",
+    "version": "1.1.0",
+    "description": "Widget for file upload. Uploading multiple files. Sorting files by mouse. Control the max number of uploaded files. File description. Easy setup, quick start.",
     "keywords": [
         "yii2",
-        "file", "image",
-        "uploader", "upload"
+        "file", "image", "multiple",
+        "upload", "crop", "resize", "thumb",
+        "sorting", "description"
     ],
     "type": "yii2-extension",
     "license": "MIT",
@@ -20,12 +21,14 @@
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
         "yiisoft/yii2-jui": "~2.0.0",
-        "bower-asset/jQuery-File-Upload" : "*",
+        "yiisoft/yii2-imagine": "~2.2.0",
+        "sergmoro1/yii2-ru-kit" : "*",
+        "npm-asset/jquery-simple-upload" : "*",
         "bower-asset/Jcrop" : "*"
     },
     "autoload": {
         "psr-4": {
-            "sergmoro1\\uploader\\": ""
+            "sergmoro1\\uploader\\": "src"
         }
     }
 }
