@@ -6,11 +6,11 @@
  * @see http://simpleupload.michaelcbrook.com/
  */
 $(document).ready(function() {
-	$('input[name="' + uploadOptions.name + '"]').change(function() {
-		$(this).simpleUpload(uploadOptions.url, {
+    $('input[name="' + uploadOptions.name + '"]').change(function() {
+        $(this).simpleUpload(uploadOptions.url, {
 
-			allowedTypes: uploadOptions.allowedTypes,
-			maxFileSize:  uploadOptions.maxFileSize,
+            allowedTypes: uploadOptions.allowedTypes,
+            maxFileSize:  uploadOptions.maxFileSize,
             data:         uploadOptions.data,
             expect:       'json',
             limit:        uploadOptions.limit,

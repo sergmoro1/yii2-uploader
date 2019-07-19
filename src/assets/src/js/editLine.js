@@ -6,14 +6,18 @@
  * <div id='uploads'>
  *     <ul class='table'>
  *         <li id='123'>
- *             <span><img></span>
+ *             <span class='block'>
+ *                 <img>
+ *                 <a id='btn-crop'>
+ *                 <a id='btn-view'>
+ *             </span>
  *             <span id='description'></span>
  *             ...
  *             <span id='buttons'>
- *                 <button id='btn-edit'>
- *                 <button id='btn-cancel'>
- *                 <button id='btn-save'>
- *                 <button id='btn-delete'>
+ *                 <a id='btn-edit'>
+ *                 <a id='btn-cancel'>
+ *                 <a id='btn-save'>
+ *                 <a id='btn-delete'>
  *             </span>
  *         </li>
  *     </ul>
@@ -270,7 +274,7 @@ editLine.add = function(li, id, is_image) {
 }
 
 /**
- * Show file image in a modal window.
+ * View file image in a modal window.
  * 
  * @param integer file_id the ID of the OneFile model
  * @param boolean popup variant for cropping
@@ -287,7 +291,7 @@ editLine.view = function(file_id) {
 }
 
 /**
- * Show file image in a modal window.
+ * Crop file image in a modal window.
  * 
  * @param integer file_id the ID of the OneFile model
  * @param boolean popup variant for cropping
