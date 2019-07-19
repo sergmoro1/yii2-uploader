@@ -137,10 +137,13 @@ Usage
 
 ```php
 $model = User::findOne(2);
+
 // get top thumb image of the model with image description
 echo Html::img($model->getImage('thumb'), ['alt' => $model->getFileDescription()) ]);
+
 // get top image of the model from main catalog
 echo Html::img($model->getImage());
+
 // get all images of the model from original catalog with image description
 $image = $model->getImage('original');
 while ($image) {
@@ -152,9 +155,9 @@ while ($image) {
 To do uploading place the widget in a form or any other view, for example `backend/views/user/_form.php`.
 
 ```
-use sergmoro1\uploader\widgets\Upload;
+use sergmoro1\uploader\widgets\Uploader;
 
-    <?= Upload::widget([
+    <?= Uploader::widget([
         'model'       => $model,
         'draggable'   => true,
         'cropAllowed' => true,
@@ -173,7 +176,7 @@ You can leave descriptions to the files. To do this in the form `backend/views/u
 in the already mentioned widget, you need to add the parameter `appendeixView`.
 
 ```php
-  <?= Byone::widget([
+  <?= Uploader::widget([
     'model'        => $model,
     'appendixView' => '/user/appendix',
     'cropAllowed'  => true,
@@ -194,11 +197,11 @@ Field `description` defined by default, but fields not limited.
 Options
 -------
 
-`cropAllowed` (false)
+**cropAllowed** (`false`)
 
 If image should be cropped, `original` size must be defined in `$sizes` array of the model.
 
-`draggable` (false)
+**draggable** (`false`)
 
 If uploaded files should be swapped then in a getter `getFiles()` rows must be sorted by `created_at`. 
 
@@ -215,30 +218,30 @@ public function getFiles()
 }
 ```
 
-`allowedTypes` ( ["image/pjpeg", "image/jpeg", "image/png", "image/x-png", "image/gif", "image/x-gif"] )
+**allowedTypes** ( `[]` )
 
-To control files types on client side.
+To control files types on client side, `['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png', 'image/gif', 'image/x-gif']`.
 
-`allowedTypesReg` ( '/image\\/[jpeg|jpg|png|gif]/i' )
+**allowedTypesReg** ( `'/image\\/[jpeg|jpg|png|gif]/i'` )
 
 Server side control.
 
-`appendixView` ( '/user/appendix' )
+**appendixView** ( `'/user/appendix'` )
 
 Html definition additional fields for uploaded files.
 
-`minFileSize` ( 10240 )
+**minFileSize** ( `10240` )
 
-Minimum file size. 0 for any.
+Minimum file size. `0` for any.
 
-`maxFileSize` ( 2048000 )
+**maxFileSize** ( `2048000` )
 
-Maximum file size. 0 for any.
+Maximum file size. `0` for any.
 
-`limit` ( 5 )
+**limit** ( `0` )
 
-Maximum amount of files to upload for one model. 0 for any.
+Maximum amount of files to upload for one model. `0` for any.
 
-`secure` ( true )
+**secure** ( `true` )
 
 Ordinary extension require user authorization, but verification may be switched off.
