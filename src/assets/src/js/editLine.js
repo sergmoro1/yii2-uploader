@@ -50,7 +50,6 @@ editLine.getRowIdBy = function(id) {
  * Aditional data for file upload action.
  * Standart fields - id and uploaded file short description.
  * 
- * @param integer file_id of the model sergmoro1\uploader\models\OneFile
  * @return array {"file_id": "123", "description": "bla bla"}
  */
 editLine.data = function() {
@@ -83,7 +82,7 @@ editLine.addField = function(tail, field) {
  * Show fields values when
  * user click save or cancel button.
  * 
- * @param integer file_id ID of the OneFile model
+ * @param integer file_id \sergmoro1\uploader\models\OneFile model
  * @param boolean save user click save or cancel button
  */
 editLine.off = function(file_id, save) {
@@ -108,7 +107,7 @@ editLine.off = function(file_id, save) {
  * Make fields editable when
  * user upload a new file or click edit button.
  * 
- * @param integer file_id ID of the OneFile model
+ * @param integer file_id \sergmoro1\uploader\models\OneFile model
  */
 editLine.on = function(file_id) {
     var that = this;
@@ -145,8 +144,6 @@ editLine.save = function(file_id) {
 
 /**
  * Add new editable line.
- * 
- * @param integer file_id
  */
 editLine.addFields = function() {
     var that = this;
@@ -257,7 +254,9 @@ editLine.addButtons = function(is_image) {
 /**
  * Add new editable line after image|file upload.
  * 
- * @param object file - uploaded files info
+ * @param object li line of a table of files
+ * @param integer id in \sergmoro1\uploader\models\OneFile
+ * @param boolean is_image an uploaded file
  */
 editLine.add = function(li, id, is_image) {
     var that = this;
@@ -276,8 +275,7 @@ editLine.add = function(li, id, is_image) {
 /**
  * View file image in a modal window.
  * 
- * @param integer file_id the ID of the OneFile model
- * @param boolean popup variant for cropping
+ * @param integer file_id \sergmoro1\uploader\models\OneFile model
  */
 editLine.view = function(file_id) {
     var that = this;
@@ -293,8 +291,7 @@ editLine.view = function(file_id) {
 /**
  * Crop file image in a modal window.
  * 
- * @param integer file_id the ID of the OneFile model
- * @param boolean popup variant for cropping
+ * @param integer file_id \sergmoro1\uploader\models\OneFile model
  */
 editLine.crop = function(file_id) {
     var that = this;
@@ -333,7 +330,7 @@ editLine.crop = function(file_id) {
 /**
  * Delete file by ID.
  * 
- * @param integer file_id the ID of the OneFile model
+ * @param integer file_id \sergmoro1\uploader\models\OneFile model
  */
 editLine.delete = function(file_id) {
     var that = this;
