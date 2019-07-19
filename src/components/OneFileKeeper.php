@@ -87,9 +87,10 @@ class OneFileKeeper extends BaseObject {
      */
     private function err($message)
     {
+        mb_internal_encoding("UTF-8");
         return [
             'success' => false,
-            'origin'  => $this->origin,
+            'ext'     => $this->ext,
             'message' => $message,
         ];
     }
@@ -112,19 +113,24 @@ class OneFileKeeper extends BaseObject {
             );
         
         $this->origin = $_FILES[$fileinput]['name'];
+
+        $name      = $_FILES[$fileinput]['name'];
+        $tmp_name  = $_FILES[$fileinput]['tmp_name'];
+        $file_type = $_FILES[$fileinput]['type'];
+        $file_size = $_FILES[$fileinput]['size'];
+
+        $is_image  = strtolower(substr($file_type, 0, 5)) == 'image';
+        $new_name  = ($is_image ? 'i' : 'd') . $this->getNewName($name);
+        
         // not uploaded
         if (!($_FILES[$fileinput]['error'] == UPLOAD_ERR_OK))
             return $this->err(
                 Module::t('core', 'File {name} can\'t be uploaded.', ['name' => $_FILES[$fileinput]['name']])
             );
         // too many files
-        if ($this->limit && $this->limit < $this->alreadyUploaded)
-            return $this->err(Module::t('core', 'Too many files uploaded.'));
+        if ($this->limit && $this->limit <= $this->alreadyUploaded)
+            return $this->err(Module::t('core', 'Too many files uploaded. Allowed {max}.', ['max' => $this->limit]));
 
-        $name      = $_FILES[$fileinput]['name'];
-        $tmp_name  = $_FILES[$fileinput]['tmp_name'];
-        $file_type = $_FILES[$fileinput]['type'];
-        $file_size = $_FILES[$fileinput]['size'];
         // check allowed types
         if (!($this->allowedTypesReg && preg_match($this->allowedTypesReg, $file_type)))
             return $this->err(
@@ -140,8 +146,6 @@ class OneFileKeeper extends BaseObject {
                 ])
             );
 
-        $is_image = strtolower(substr($file_type, 0, 5)) == 'image';
-
         // check min width and height of Image
         if ($is_image) {
             $image = Image::getImagine()->open($tmp_name);
@@ -152,8 +156,6 @@ class OneFileKeeper extends BaseObject {
                 return $this->err(Module::t('core', 'The width or height of the image, or both, is smaller than necessary.'));
         }
 
-        $new_name = ($is_image ? 'i' : 'd') . $this->getNewName($name);
-        
         if (move_uploaded_file($tmp_name, $this->set_path . $new_name)) {
             if ($is_image) {
                 $this->resizeSave($this->set_path, $new_name);

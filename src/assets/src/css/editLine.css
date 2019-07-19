@@ -29,10 +29,10 @@
 	transition: .25s ease-out;
 }
 
-#uploads .table li.error .extension,
-#uploads .table li.error .filename {
+#uploads .table li.error .extension {
 	text-align: center;
 	font-size: 14pt;
+	color: #777;
 	font-weight: bold;
 	margin-top: 10px;
 }
@@ -40,6 +40,9 @@
 #uploads .table li.error .message {
 	text-align: left;
 	font-size: 11pt;
+}
+
+#uploads .table li.error .message {
 	color: #d9534f;
 }
 

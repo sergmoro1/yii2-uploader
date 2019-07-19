@@ -6,7 +6,7 @@ Multiple uploading, sorting file collection by mouse, adding description for the
 Demo
 ----
 
-[Photo gallery before & after](http://sample.vorst.ru/stout/index "Images that were made before and after some period").
+In progress.
 
 Advantages
 ----------
@@ -16,7 +16,7 @@ A common approach for working with uploading images or files in an application.
 If the model needs images or files, it is enough
 
 * to connect the behavior, 
-* determine the directory in which they will be stored, 
+* determine the subdirectory in which they will be stored, 
 * define the desired image sizes and 
 * the method that receives the files for the model.
 
@@ -83,6 +83,9 @@ In the subdirectory the files are arranged by users and sizes.
 
 Where `2` is the user ID.
 
+Sizes in an example are `thumb`, `main`, `original`.
+More sizes can be defined but those are `must have`.
+
 Installation
 ------------
 
@@ -102,7 +105,7 @@ Run migration.
 
 `php yii migrate --migrationPath=@vendor/sergmoro1/yii2-uploader/src/migrations`
 
-If you used a previous version `sergmoro1\yii2-byone-uploader` then run only the next migration. 
+If you used a previous version `sergmoro1\yii2-byone-uploader` then run only the next migration.
 
 `php yii migrate --migrationPath=@vendor/sergmoro1/yii2-uploader/src/migrations/v1`
 
@@ -153,13 +156,15 @@ use sergmoro1\uploader\widgets\Upload;
 
     <?= Upload::widget([
         'model'       => $model,
+        'draggable'   => true,
         'cropAllowed' => true,
+        'limit'       => 5,
     ]) ?>
 ```
 
-If image should be cropped, subdirectory `original` need to be define.
+If image should be cropped, subdirectories `original`, `main`, `thumb` must to be defined.
 
-May be uploaded any amount of files for one model but files amount can be limited by `maxFiles` parameter of the widget.
+May be uploaded any amount of files for one model but files amount can be limited by `limit` parameter of the widget.
 
 Description of uploaded files
 -----------------------------
@@ -210,14 +215,30 @@ public function getFiles()
 }
 ```
 
-`acceptFileTypes` (image/[jpeg|jpg|png|gif])
+`allowedTypes` ( ["image/pjpeg", "image/jpeg", "image/png", "image/x-png", "image/gif", "image/x-gif"] )
 
-`minFileSize` (0.1Mb)
+To control files types on client side.
 
-`maxFileSize` (2Mb)
+`allowedTypesReg` ( '/image\\/[jpeg|jpg|png|gif]/i' )
 
-`maxFiles` (0 - any amount)
+Server side control.
 
-`secure` (true)
+`appendixView` ( '/user/appendix' )
+
+Html definition additional fields for uploaded files.
+
+`minFileSize` ( 10240 )
+
+Minimum file size. 0 for any.
+
+`maxFileSize` ( 2048000 )
+
+Maximum file size. 0 for any.
+
+`limit` ( 5 )
+
+Maximum amount of files to upload for one model. 0 for any.
+
+`secure` ( true )
 
 Ordinary extension require user authorization, but verification may be switched off.

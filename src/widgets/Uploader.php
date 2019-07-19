@@ -122,6 +122,7 @@ class Uploader extends Widget {
             'minW'         => $this->model->getMin(),
             'aspectRatio'  => $this->model->getAspectRatio(),
             'minH'         => ($this->model->getMin() * $this->model->getAspectRatio()),
+            'popUpWidth'   => $this->model->getPopUpWidth(),
         ];
         $json = json_encode($editLineOptions);
         $this->view->registerJs("editLine.options = $json;", View::POS_READY);

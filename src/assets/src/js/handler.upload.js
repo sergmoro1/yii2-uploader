@@ -51,7 +51,7 @@ $(document).ready(function() {
                 } else {
                     // error
                     // add block with file name
-                    this.block.addClass('filename').text(data.origin);
+                    this.block.addClass('extension').text(data.ext);
                     // and message
                     var message = $('<span/>').addClass('message').text(data.message);
                     // add line with error to table

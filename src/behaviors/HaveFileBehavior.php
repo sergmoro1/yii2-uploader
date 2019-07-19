@@ -16,12 +16,12 @@ use sergmoro1\uploader\models\OneFile;
  */
 class HaveFileBehavior extends Behavior
 {
-    // Prefix for cropping standart file name
-    const STANDART = 's';
     // Min size in pixels for cropping
     const MIN_SIZE = 100;
     // Default aspect ratio for cropping - 16/9
     const ASPECT_RATIO = 1.7778;
+    // Popup window border
+    const POPUP_BORDER = 35;
 
     /** @var string main directory where files will be saved, for ex. /files/user */
     public $file_path;
@@ -251,23 +251,48 @@ class HaveFileBehavior extends Behavior
             if(file_exists($path . $size['catalog'] . '/' . $file))
                 unlink($path . $size['catalog'] . '/' . $file);
         }
-        // delete standart for cropping 
-        if(file_exists($path . '/' . self::STANDART . $file))
-            unlink($path . '/' . self::STANDART . $file);
     }
 
+    /**
+     * Get minimal size for cropping rectangle.
+     * 
+     * @return integer
+     */
     public function getMin()
     {
         if ($this->_min)
             return $this->_min;
+        $ow = isset($this->owner->sizes['original']['width']) ? $this->owner->sizes['original']['width'] : 0;
+        $oh = isset($this->owner->sizes['original']['height']) ? $this->owner->sizes['original']['height'] : 0;
         $mw = isset($this->owner->sizes['main']['width']) ? $this->owner->sizes['main']['width'] : 0;
         $mh = isset($this->owner->sizes['main']['height']) ? $this->owner->sizes['main']['height'] : 0;
-        $this->_min = ($mw == 0 || $mh == 0)
-            ? self::MIN_SIZE
-            : ($mw > $mh ? $mh : $mw);
+        if ($ow > $oh) {
+            $scale = ($mw > 0) ? $ow / $mw : self::MIN_SIZE;
+            $this->_min = min(floor($oh / $scale), $mh);
+        } else {
+            $scale = ($mh > 0) ? $oh / $mh : self::MIN_SIZE;
+            $this->_min = max(floor($ow / $scale), $mw);
+        }
         return $this->_min;
     }
     
+    /**
+     * Get width for popup window using for cropping.
+     * 
+     * @return integer
+     */
+    public function getPopUpWidth()
+    {
+        return (isset($this->owner->sizes['main']['width']) 
+            ? $this->owner->sizes['main']['width']
+            : self::MIN_SIZE) + self::POPUP_BORDER;
+    }
+
+    /**
+     * Get image aspect ratio for cropping.
+     * 
+     * @return float
+     */
     public function getAspectRatio()
     {
         if ($this->_aspectRatio)

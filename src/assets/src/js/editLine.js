@@ -318,11 +318,11 @@ editLine.crop = function(file_id) {
                 jcrop_api = this;
             }
         );
+        // make popup some wider or vise versa
+        that.preview.find('.modal-content').width(that.options.popUpWidth);
+        // show popup
+        that.preview.modal({backdrop: false});
     }
-    // make popup some wider
-    that.preview.find('.modal-content').width(that.options.minW * ar + 30);
-    // show popup
-    that.preview.modal({backdrop: false});
 }
 
 /**
