@@ -271,7 +271,7 @@ class HaveFileBehavior extends Behavior
             $this->_min = min(floor($oh / $scale), $mh);
         } else {
             $scale = ($mh > 0) ? $oh / $mh : self::MIN_SIZE;
-            $this->_min = max(floor($ow / $scale), $mw);
+            $this->_min = min(floor($ow / $scale), $mw);
         }
         return $this->_min;
     }
@@ -285,7 +285,8 @@ class HaveFileBehavior extends Behavior
     {
         return (isset($this->owner->sizes['main']['width']) 
             ? $this->owner->sizes['main']['width']
-            : self::MIN_SIZE) + self::POPUP_BORDER;
+            : self::MIN_SIZE
+        ) + self::POPUP_BORDER;
     }
 
     /**
@@ -312,7 +313,7 @@ class HaveFileBehavior extends Behavior
      * $param array $imageOptions HTML options for <img> tag
      * $param boolean $need_caption
      * @return array $items for slider
-     * @see usage sergmoro1\yii2-blog-tools\src\views\post\view.php
+     * @see usage \sergmoro1\yii2-blog-tools\src\views\post\view.php
      */
     public function prepareSlider($wrapper = 'div', $wrapperOptions = [], $imgOptions = [], $need_caption = false)
     {

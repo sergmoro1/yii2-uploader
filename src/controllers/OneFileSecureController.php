@@ -1,16 +1,15 @@
 <?php
-/**
- * @author - Sergey Morozov <sergmoro1@ya.ru>
- * @license - MIT
- * 
- * Ajax requests handler serves file uploading.
- */
 
 namespace sergmoro1\uploader\controllers;
 
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
+/**
+ * Ajax requests secure handler serves file uploading.
+ * 
+ * @author Sergey Morozov <sergmoro1@ya.ru>
+ */
 class OneFileSecureController extends OneFileController {
 
     public function behaviors()
@@ -18,7 +17,7 @@ class OneFileSecureController extends OneFileController {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'crop', 'delete', 'save'],
+                'only' => ['create', 'crop', 'delete', 'update', 'swap'],
                 'rules' => [
                     [
                         'actions' => ['create', 'crop', 'delete', 'update', 'swap'],
@@ -30,7 +29,10 @@ class OneFileSecureController extends OneFileController {
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
+                    'create' => ['post'],
                     'delete' => ['post'],
+                    'update' => ['post'],
+                    'swap'   => ['post'],
                 ],
             ],
         ];

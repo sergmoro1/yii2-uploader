@@ -6,7 +6,8 @@ use yii\base\BaseObject;
 use yii\imagine\Image;
 
 /**
- * Class for cropping image uploaded before and resize them.
+ * Class for cropping image uploaded before and resize it for all defined sizes.
+ * Original size should be defined.
  *
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */

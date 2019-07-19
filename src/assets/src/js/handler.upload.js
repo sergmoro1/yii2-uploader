@@ -1,6 +1,6 @@
 /**
- * SimpleUpload handler.
- * uploadOptions should be defined before handler.
+ * SimpleUpload.js handler.
+ * UploadOptions should be defined before handler.
  * 
  * @author Sergey Morozov <sergmoro1@ya.ru>
  * @see http://simpleupload.michaelcbrook.com/
@@ -46,15 +46,15 @@ $(document).ready(function() {
                             .data('img', data.file.path + data.file.name)
                         : $('<span/>').addClass('extension').text(data.file.ext);
                     this.block.append(fileBlock);
-                    // add new line to table
+                    // add new line to the table
                     editLine.add(this.li, data.file.id, data.file.is_image);
                 } else {
                     // error
-                    // add block with file name
+                    // add block with file extension
                     this.block.addClass('extension').text(data.ext);
                     // and message
                     var message = $('<span/>').addClass('message').text(data.message);
-                    // add line with error to table
+                    // add line with error to the table
                     this.li.addClass('error').append(message);
                 }
             },

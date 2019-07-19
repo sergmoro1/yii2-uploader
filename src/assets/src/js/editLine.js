@@ -150,6 +150,7 @@ editLine.addFields = function() {
     {
         var rowId = this.getRowId();
         var buttons = $(rowId).find('#buttons');
+        // add fields
         for(var i = 0; i < that.fields.length; i++) {
             field = that.fields[i];
             buttons.before($('<span/>').prop('id', field.name));
@@ -169,7 +170,7 @@ editLine.addFields = function() {
 /**
  * Add buttons to edit line.
  * 
- * @param boolean is_image add view button
+ * @param boolean is_image if file is an image add view and, may be, crop buttons
  */
 editLine.addButtons = function(is_image) {
     var that = this;
@@ -210,16 +211,6 @@ editLine.addButtons = function(is_image) {
     }
     if (is_image) {
         var img_tool = $('<div>').addClass('img-tool');
-        // view
-        img_tool
-            .append($('<a/>')
-                .prop('id', 'btn-view')
-                .addClass(that.options.btns.view.class)
-                .html(that.options.btns.view.caption)
-                .on('click', function() {
-                    that.view($(this).closest('li').prop('id'));
-                })
-            );
         if (that.options.cropAllowed) {
             // cropping
             img_tool
@@ -232,6 +223,16 @@ editLine.addButtons = function(is_image) {
                     })
                 );
         }
+        // view
+        img_tool
+            .append($('<a/>')
+                .prop('id', 'btn-view')
+                .addClass(that.options.btns.view.class)
+                .html(that.options.btns.view.caption)
+                .on('click', function() {
+                    that.view($(this).closest('li').prop('id'));
+                })
+            );
         block.append(img_tool);
     }
     // button delete should be placed in any case

@@ -15,7 +15,7 @@ use yii\bootstrap\Modal;
     <label class='control-label'>
         <?= $btns['choose']['label']; ?>
     </label>
-    <p><?= \Yii::t('core', 'After saving you will be able to upload images or other files') ?></p>
+    <p><?= \Yii::t('core', 'After saving you will be able to upload images or other files.') ?></p>
 <?php else: ?>
 
     <?php Modal::begin([
@@ -99,7 +99,9 @@ use yii\bootstrap\Modal;
                         <?php else: ?>
                             <!-- file extension -->
                             <span class='block'>
-                                <?= substr($file->name, strrpos($file->name, '.')); ?>
+                                <span class='extension'>
+                                    <?= substr($file->name, strrpos($file->name, '.')); ?>
+                                </span>
                             </span>
                         <?php endif; ?>
                         <!-- additional fields -->

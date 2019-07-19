@@ -56,6 +56,7 @@ $(function () {
         });
     });
     $('#preview').on('hidden.bs.modal', function (e) {
+        // delete cropping services data if it initiated before
         if (window.jcrop_api && $(this).find('.modal-footer .keeper').length > 0) {
             jcrop_api.destroy();
             $('#preview .modal-footer .keeper').remove();

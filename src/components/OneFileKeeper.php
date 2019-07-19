@@ -42,7 +42,6 @@ class OneFileKeeper extends BaseObject {
     /** @var integer $alreadyUploaded files */
     public $alreadyUploaded;
 
-    private $origin = '';
     private $ext;
     
     /**
@@ -87,7 +86,6 @@ class OneFileKeeper extends BaseObject {
      */
     private function err($message)
     {
-        mb_internal_encoding("UTF-8");
         return [
             'success' => false,
             'ext'     => $this->ext,
@@ -96,11 +94,11 @@ class OneFileKeeper extends BaseObject {
     }
     
     /**
-     * Resizing and keeping uploaded file.
-     * Save information about file in \sergmoro1\uploader\models\OneFile.
+     * Resizing and keeping uploaded file. Save information about uploaded file.
      * 
      * @param string $file_input
      * @return array information about uploaded files | errors
+     * @see \sergmoro1\uploader\models\OneFile.
      */
     public function proceed($fileinput)
     {
@@ -112,7 +110,9 @@ class OneFileKeeper extends BaseObject {
                 ])
             );
         
-        $this->origin = $_FILES[$fileinput]['name'];
+        // not uploaded
+        if (!($_FILES[$fileinput]['error'] == UPLOAD_ERR_OK))
+            return $this->err(Module::t('core', 'File can\'t be uploaded.'));
 
         $name      = $_FILES[$fileinput]['name'];
         $tmp_name  = $_FILES[$fileinput]['tmp_name'];
@@ -122,11 +122,6 @@ class OneFileKeeper extends BaseObject {
         $is_image  = strtolower(substr($file_type, 0, 5)) == 'image';
         $new_name  = ($is_image ? 'i' : 'd') . $this->getNewName($name);
         
-        // not uploaded
-        if (!($_FILES[$fileinput]['error'] == UPLOAD_ERR_OK))
-            return $this->err(
-                Module::t('core', 'File {name} can\'t be uploaded.', ['name' => $_FILES[$fileinput]['name']])
-            );
         // too many files
         if ($this->limit && $this->limit <= $this->alreadyUploaded)
             return $this->err(Module::t('core', 'Too many files uploaded. Allowed {max}.', ['max' => $this->limit]));
@@ -153,7 +148,11 @@ class OneFileKeeper extends BaseObject {
             if ($image_size->getWidth() < $this->sizes['main']['width'] &&
                 $image_size->getHeight() < $this->sizes['main']['height'])
 
-                return $this->err(Module::t('core', 'The width or height of the image, or both, is smaller than necessary.'));
+                return $this->err(
+                    Module::t('core', 'The width or height of the image, or both, is smaller than necessary [{width}, {height}]px.'), [
+                        'width'  => $this->sizes['main']['width'],
+                        'height' => $this->sizes['main']['height'],
+                    ]);
         }
 
         if (move_uploaded_file($tmp_name, $this->set_path . $new_name)) {

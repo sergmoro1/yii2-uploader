@@ -10,7 +10,7 @@ use sergmoro1\rukit\behaviors\TransliteratorBehavior;
 
 /**
  * OneFile model class.
- * One model for all uploaded Files of a project.
+ * One model for all uploaded files of a project.
  *
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */

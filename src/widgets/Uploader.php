@@ -15,42 +15,56 @@ use sergmoro1\uploader\assets\DraggableAsset;
 use sergmoro1\uploader\assets\JcropAsset;
 
 /**
- * File upload widget with simpleUpload.js and JCrop.js
+ * Multiple file upload widget.
  * 
  * @author Sergey Morozov <sergmoro1@ya.ru>
+ * @see http://simpleupload.michaelcbrook.com
+ * @see http://deepliquid.com/content/Jcrop.html
  */
 class Uploader extends Widget {
-    /** @var string name of file input field */
+    /** @var string $name of file input field */
     public $name = 'fileinput';
-    /** $var yii\db\ActiveRecord model connected with uploader */
+    /** $var yii\db\ActiveRecord $model connected with uploader */
     public $model;
-    /** @var string relation name by default, for OneFile model, you can change it on your own */
+    /** @var string $files relation name by default, for OneFile model, you can change it on your own */
     public $files = 'files';
-    /** @var boolean secure actions for sergmoro1\uploader\controllers\OneFileController or not */
+    /** @var boolean $secure actions for sergmoro1\uploader\controllers\OneFileController or not */
     public $secure = true;
-    /** @var boolean draggable line of uploaded files or not */
+    /** @var boolean $draggable line of uploaded files or not */
     public $draggable = false; 
-    /** @var boolean cropping allowed, if uploaded file is image? or not */
+    /** @var boolean $cropAllowed for images only */
     public $cropAllowed = false;
-    /** @var string path to a view file with additional fields connected with uploaded file */
+    /** @var string $appendixView path to a view file with additional fields connected with uploaded file */
     public $appendixView = ''; 
 
     // OneFile model fields
+    
+    /** @var string $modelClass parent model class */
     public $modelClass;
+    /** @var integer $parent_id in a parent model */
     public $parent_id;
+    /** @var string $subdir in main directory */
     public $subdir;
 
     // simpleUpload.js settings
-    public $limit = 0;          // max count of files that can be uploaded, 0 mean any amount
-    public $maxFileSize = null; // max file size in bytes
-    public $allowedTypes = []; // array of types like 'image/jpeg', used only by js plugin
-    // additional settings
-    public $allowedTypesReg = '/image\/[jpeg|jpg|png|gif]/i'; // regexp for checking file types, used on the server side
-    public $minFileSize = null; // min file size in bytes
+
+    /** @var integer $limit amount of files that can be uploaded, 0 mean any amount */
+    public $limit = 0;
+    /** @var integer $maxFileSize in bytes */
+    public $maxFileSize = null;
+    /** @var array $allowedTypes allowed mime types used on client side */
+    public $allowedTypes = [];
     
-    // Buttons for working with uploaded files.
-    // All actions defined in OneFileController.
+    // additional settings
+    
+    /** @var string $allowedTypesReg regexp for checking file types, used on the server side */
+    public $allowedTypesReg = '/image\/[jpeg|jpg|png|gif]/i';
+    /** @var integer $minFileSize in bytes */
+    public $minFileSize = null;
+    
+    /** @var array $buttons for working with uploaded files */
     public $btns = [];
+    /** @var array $defaults for $buttons, all action from \sergmoro1\uploader\controllers\OneFileController */
     private static $defaults = [
         'choose' => [
             'class' => 'btn btn-default',
@@ -87,10 +101,13 @@ class Uploader extends Widget {
         ],
     ];
     
+    /** @var array $errors */
     public $errors = [];
    
+    /** @var string $uploadAction url for upload action */
     public $uploadAction = '/uploader/one-file-secure/create';
     
+    /** @var array $simpleUpload initial params of the plugin */
     public $simpleUpload = [
         'name'   => 'fileinput',
         'expect' => 'json',
@@ -218,7 +235,7 @@ class Uploader extends Widget {
     }
     
     /**
-     * Set JS plugin options.
+     * Set SimpleUpload.js plugin options.
      */
     public function setPlugin()
     {

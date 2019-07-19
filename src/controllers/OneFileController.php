@@ -16,7 +16,7 @@ use sergmoro1\uploader\components\OneFileCropper;
 /**
  * Ajax requests handler serves file uploading.
  * 
- * @author Sergey Morozov <sergey@vorst.ru>
+ * @author Sergey Morozov <sergmoro1@ya.ru>
  */
 class OneFileController extends Controller {
     /**
@@ -27,6 +27,9 @@ class OneFileController extends Controller {
      * @param string  $model class
      * @param integer $parent_id of a model that file belongs to
      * @param string  $subdir subdirectory where file will be saved
+     * @param string  $allowedTypesReg regexp to check file type
+     * @param integer $minFileSize
+     * @param integer $maxFileSize
      * @param integer $limit amount of uploaded files
      * @return string JSON array with results of creating
      * @throws ForbiddenHttpException
@@ -60,7 +63,7 @@ class OneFileController extends Controller {
     /**
      * Load file, uploaded before and crop it.
      * 
-     * @param integer $id \sergmoro1\uploader\models\OneFile
+     * @param integer $id of \sergmoro1\uploader\models\OneFile model
      * @param integer $x left
      * @param integer $y top corner of image for cropping
      * @param integer $w width
@@ -97,6 +100,7 @@ class OneFileController extends Controller {
      * Delete file. If it an image then delete all sizes.
      * Also delete information about file from \sergmoro1\uploader\models\OneFile.
      * 
+     * POST params:
      * @param integer $file_id that should be deleted
      * @return string JSON array with results of deleting
      * @throws ForbiddenHttpException
@@ -124,6 +128,7 @@ class OneFileController extends Controller {
     /**
      * Update file additional info.
      * 
+     * POST params:
      * @param integer $file_id that should be updated
      * @param string $defs JSON array
      * @return string JSON array with results of updating
@@ -155,6 +160,7 @@ class OneFileController extends Controller {
     /**
      * Swap rows with file information.
      * 
+     * POST params:
      * @param integer $b
      * @param integer $a files ids that should be swapped with each other
      */

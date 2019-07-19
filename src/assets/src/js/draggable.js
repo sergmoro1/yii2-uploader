@@ -1,5 +1,6 @@
 /**
  * Make file lines draggable.
+ * Lines sorted by created_at field in a \sergmoro1\uploader\models\OneFile model.
  * 
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */
