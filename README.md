@@ -32,7 +32,7 @@ class User extends ActiveRecord
 {
     // sizes and subdirs of uploaded images
     public $sizes = [
-        'original' => ['width' => 1600, 'height' => 900, 'catalog' => 'original'],
+        'original' => ['width' => 1200, 'height' => 1200, 'catalog' => 'original'],
         'main'     => ['width' => 400,  'height' => 400, 'catalog' => ''],
         'thumb'    => ['width' => 90,   'height' => 90,  'catalog' => 'thumb'],
     ];
@@ -199,7 +199,11 @@ Options
 
 **cropAllowed** (`false`)
 
-If image should be cropped, `original` size must be defined in `$sizes` array of the model.
+If image should be cropped, `original`, `main`, `thumb` sizes must be defined in `$sizes` array of the model.
+
+The cropping sizes are specified by the main directory where `catalor` parameter should be equal `''`.
+
+If this directory is set to square, then the remaining sizes will be square after cropping.
 
 **draggable** (`false`)
 
@@ -221,22 +225,23 @@ public function getFiles()
 **allowedTypes** ( `[]` )
 
 To control files types on client side, `['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png', 'image/gif', 'image/x-gif']`.
+Any if empty.
 
 **allowedTypesReg** ( `'/image\\/[jpeg|jpg|png|gif]/i'` )
 
-Server side control.
+Server side control. Any if empty. Preferable way to check allowed types to upload.
 
-**appendixView** ( `'/user/appendix'` )
+**appendixView** ( `` )
 
-Html definition additional fields for uploaded files.
+View file name of additional fields for uploaded files. For ex. `'/user/appendix'`. See `\sergmoro1\user\views\user\appendix.php`.
 
-**minFileSize** ( `10240` )
+**minFileSize** ( `0` )
 
-Minimum file size. `0` for any.
+Minimum file size in bytes. `0` for any.
 
-**maxFileSize** ( `2048000` )
+**maxFileSize** ( `0` )
 
-Maximum file size. `0` for any.
+Maximum file size in bytes. `0` for any.
 
 **limit** ( `0` )
 
