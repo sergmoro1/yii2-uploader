@@ -151,6 +151,14 @@ class HaveFileBehavior extends Behavior
     }
 
     /**
+     * Is type an image.
+     * 
+     * @param string media $type
+     * @return boolean
+    */
+    public function isImage($type) { return substr($type, 0, 5) == 'image'; }
+
+    /**
      * Get image by index.
      * 
      * @param string $catalog - 'main', 'thumb' and so
@@ -161,7 +169,7 @@ class HaveFileBehavior extends Behavior
     {
         if ($file = $this->getFile($i))
         {
-            if (substr($file->type, 0, 5) == 'image')
+            if ($this->isImage($file->type))
                 return $this->getFilePath($file->subdir, $catalog) . $file->name;
             else
                 return false;

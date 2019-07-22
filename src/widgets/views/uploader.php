@@ -77,7 +77,7 @@ use yii\bootstrap\Modal;
                 <!-- table with files/images already uploaded at the time the form load -->
                 <?php foreach($model->$files as $i => $file): ?>
                     <li id='<?php echo $file->id; ?>'>
-                        <?php if($file->isImage()): ?>
+                        <?php if($model->isImage($file->type)): ?>
                             <!-- image -->
                             <span class='block'>
                                 <?= Html::img($model->getImage('thumb', $i), ['data-img' => $model->getImage('', $i)]); ?>
