@@ -310,9 +310,15 @@ editLine.crop = function(file_id) {
         var ar = that.options.aspectRatio;
         cropBox.Jcrop({
             boxWidth: ww,
-            setSelect: [0, 0, ww, ww / ar], 
+            // at the time of widget initialization, the real size of the image is not known
+            // aspect ratio can be greater than specified in the model
+            // for example, the model is set to 4/3, and the real picture is 16/9
+            // in this case, the selection area will be larger than the image size
+            // adjust it a bit
+            setSelect: [0, 0, that.options.minW / 2, that.options.minH / 2], 
             aspectRatio: ar,
-            minSize: [that.options.minW, that.options.minH], 
+            // and a minimal area too
+            minSize: [that.options.minW / 2 * ar, that.options.minH / 2 * ar],
             onChange: coordsChanged,
             onSelect: coordsChanged
         },
