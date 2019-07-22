@@ -231,9 +231,10 @@ Any if empty.
 
 Server side control. Any if empty. Preferable way to check allowed types to upload.
 
-**appendixView** ( `` )
+**appendixView** ( `''` )
 
-View file name of additional fields for uploaded files. For ex. `'/user/appendix'`. See `\sergmoro1\user\views\user\appendix.php`.
+View file name of additional fields for uploaded files. For ex. `'/user/appendix'`. 
+See [views/user/appendix.php](https://github.com/sergmoro1/user/views/user/appendix.php).
 
 **minFileSize** ( `0` )
 
