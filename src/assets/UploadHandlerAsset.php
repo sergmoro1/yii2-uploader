@@ -6,7 +6,7 @@ use yii\web\AssetBundle;
 
 class UploadHandlerAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/sergmoro1/yii2-uploader/src/assets/src';
+    public $sourcePath = '@vendor/sergmoro1/yii2-uploader/src/assets/dist';
     public $css = [
         'css/upload.css',
     ];
