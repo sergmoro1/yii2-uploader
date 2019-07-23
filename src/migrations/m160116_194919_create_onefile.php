@@ -1,4 +1,5 @@
 <?php
+namespace sergmoro1\uploader\migrations;
 
 use yii\db\Schema;
 use yii\db\Migration;
