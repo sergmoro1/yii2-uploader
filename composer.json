@@ -22,9 +22,9 @@
         "yiisoft/yii2": "*",
         "yiisoft/yii2-jui": "~2.0.0",
         "yiisoft/yii2-imagine": "^2.2",
-        "sergmoro1/yii2-ru-kit" : "*",
         "npm-asset/jquery-simple-upload" : "*",
-        "bower-asset/Jcrop" : "*"
+        "bower-asset/Jcrop" : "*",
+        "sergmoro1/yii2-ru-kit" : "dev-master"
     },
     "autoload": {
         "psr-4": {
