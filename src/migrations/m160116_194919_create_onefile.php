@@ -46,6 +46,6 @@ class m160116_194919_create_onefile extends Migration
 
     public function down()
     {
-        $this->dropTable((self::TABLE_ONEFILE);
+        $this->dropTable(self::TABLE_ONEFILE);
     }
 }
