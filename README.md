@@ -6,7 +6,8 @@ Multiple uploading, sorting file collection by mouse, adding description for the
 Demo
 ----
 
-In progress.
+Photos [by categories](http://sample.vorst.ru/photo/index),
+photo gallery [BEFORE | AFTER](http://sample.vorst.ru/stout/index).
 
 Advantages
 ----------
