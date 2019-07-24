@@ -8,9 +8,7 @@ use yii\web\View;
 use yii\helpers\Url;
 use yii\base\NotSupportedException;
 
-use sergmoro1\uploader\assets\SimpleUploadAsset;
-use sergmoro1\uploader\assets\EditLineAsset;
-use sergmoro1\uploader\assets\JQueryUiAsset;
+use sergmoro1\uploader\assets\UploadHandlerAsset;
 use sergmoro1\uploader\assets\DraggableAsset;
 use sergmoro1\uploader\assets\JcropAsset;
 
@@ -148,12 +146,9 @@ class Uploader extends Widget {
         $this->view->registerJs("var uploadOptions = $json;", View::POS_HEAD);
         
         // assets 
-        SimpleUploadAsset::register($this->view);
-        EditLineAsset::register($this->view);
-        if($this->draggable) {
-            JQueryUiAsset::register($this->view);
+        UploadHandlerAsset::register($this->view);
+        if($this->draggable)
             DraggableAsset::register($this->view);
-        }
         if($this->cropAllowed) 
             JcropAsset::register($this->view);
     }

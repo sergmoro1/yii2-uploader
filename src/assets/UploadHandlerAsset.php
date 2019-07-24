@@ -14,5 +14,7 @@ class UploadHandlerAsset extends AssetBundle
         'js/handler.upload.js',
     ];
     public $depends = [
+        'sergmoro1\uploader\assets\SimpleUploadAsset',
+        'sergmoro1\uploader\assets\EditLineAsset',
     ];
 }

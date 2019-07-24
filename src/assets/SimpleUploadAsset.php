@@ -14,6 +14,5 @@ class SimpleUploadAsset extends AssetBundle
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'sergmoro1\uploader\assets\UploadHandlerAsset',
     ];
 }

@@ -14,5 +14,6 @@ class DraggableAsset extends AssetBundle
         'js/draggable.js',
     ];
     public $depends = [
+        'sergmoro1\uploader\assets\JQueryUiAsset',
     ];
 }
