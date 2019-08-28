@@ -15,8 +15,7 @@
             "email": "sergmoro1@ya.ru"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
@@ -24,7 +23,7 @@
         "yiisoft/yii2-imagine": "^2.2",
         "npm-asset/jquery-simple-upload" : "*",
         "bower-asset/Jcrop" : "*",
-        "sergmoro1/yii2-ru-kit" : "dev-master"
+        "sergmoro1/yii2-ru-kit" : "~1.1"
     },
     "autoload": {
         "psr-4": {

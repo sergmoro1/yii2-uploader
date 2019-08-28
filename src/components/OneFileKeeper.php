@@ -145,14 +145,15 @@ class OneFileKeeper extends BaseObject {
         if ($is_image) {
             $image = Image::getImagine()->open($tmp_name);
             $image_size = $image->getSize();
-            if ($image_size->getWidth() < $this->sizes['main']['width'] &&
+            if ($image_size->getWidth() < $this->sizes['main']['width'] ||
                 $image_size->getHeight() < $this->sizes['main']['height'])
 
                 return $this->err(
-                    Module::t('core', 'The width or height of the image, or both, is smaller than necessary [{width}, {height}]px.'), [
+                    Module::t('core', 'The width or height of the image, or both, is smaller than necessary [{width}, {height}]px.', [
                         'width'  => $this->sizes['main']['width'],
                         'height' => $this->sizes['main']['height'],
-                    ]);
+                    ])
+                );
         }
 
         if (move_uploaded_file($tmp_name, $this->set_path . $new_name)) {

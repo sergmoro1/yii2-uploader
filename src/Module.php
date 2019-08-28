@@ -8,6 +8,7 @@ class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'sergmoro1\uploader\controllers';
     public $controllerMap = ['uploader' => 'sergmoro1\uploader\controllers\OneFile'];
+    public $sourceLanguage = 'en-US';
 
     public function init()
     {
@@ -21,12 +22,12 @@ class Module extends \yii\base\Module
      */
     public function registerTranslations()
     {
-        Yii::$app->i18n->translations['sergmoro1/uploder/*'] = [
+        Yii::$app->i18n->translations['sergmoro1/uploader/*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
-            'sourceLanguage' => 'ru-RU', //$this->sourceLanguage,
-            'basePath' => '@vendor/sergmoro1/yii2-uploder/src/messages',
+            'sourceLanguage' => $this->sourceLanguage,
+            'basePath' => '@vendor/sergmoro1/yii2-uploader/src/messages',
             'fileMap' => [
-                'sergmoro1/uploder/core' => 'core.php',
+                'sergmoro1/uploader/core' => 'core.php',
             ],
         ];
     }
@@ -43,6 +44,6 @@ class Module extends \yii\base\Module
      */
     public static function t($category, $message, $params = [], $language = null)
     {
-        return Yii::t('sergmoro1/uploder/' . $category, $message, $params, $language);
+        return Yii::t('sergmoro1/uploader/' . $category, $message, $params, $language);
     }
 }
