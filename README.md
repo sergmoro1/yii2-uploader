@@ -98,7 +98,7 @@ Either run
 
 or add
 
-`"sergmoro1/yii2-uploader": "dev-master"`
+`"sergmoro1/yii2-uploader": "~1.1"`
 
 to the require section of your composer.json.
 
