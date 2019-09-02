@@ -14,7 +14,7 @@ Advantages
 
 A common approach for working with uploading images or files in an application.
 
-If the model needs images or files, it is enough
+If the model needs images or files, it is enough:
 
 * to connect the behavior, 
 * determine the subdirectory in which they will be stored, 
