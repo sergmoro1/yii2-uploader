@@ -1,0 +1,13 @@
+.draggable-zone {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #999;
+}
+.draggable-zone a {
+  color: #999;
+  text-decoration: none;
+}
+.draggable-zone a:hover {
+  text-decoration: none;
+}
