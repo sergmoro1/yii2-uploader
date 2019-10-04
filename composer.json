@@ -1,0 +1,33 @@
+{
+    "name": "sergmoro1/yii2-uploader",
+    "description": "File uploader. Upload multiple files at once. Resize and Crop images. Any size available. Sorting by mouse. Control the max number of uploaded files. File description. Easy setup, quick start.",
+    "keywords": [
+        "yii2",
+        "file", "image", "multiple",
+        "upload", "crop", "resize", "thumb",
+        "sorting", "description"
+    ],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Morozov",
+            "email": "sergmoro1@ya.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-jui": "~2.0.0",
+        "yiisoft/yii2-imagine": "^2.2",
+        "npm-asset/jquery-simple-upload" : "*",
+        "bower-asset/Jcrop" : "*",
+        "sergmoro1/yii2-ru-kit" : "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "sergmoro1\\uploader\\": "src"
+        }
+    }
+}
