@@ -6,7 +6,7 @@ use yii\db\Migration;
 
 class m191207_214910_create_queue extends Migration
 {
-    private const TABLE_QUEUE = '{{%queue}}';
+    const TABLE_QUEUE = '{{%queue}}';
     
     public function up()
     {

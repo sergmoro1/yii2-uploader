@@ -2,11 +2,13 @@
 
 namespace sergmoro1\uploader\components;
 
+use Yii;
 use yii\base\BaseObject;
 use yii\imagine\Image;
 
 use sergmoro1\uploader\Module;
 use sergmoro1\uploader\models\OneFile;
+use sergmoro1\uploader\components\ResizeImageJob;
 
 /**
  * Class for keeping just uploaded files and resize them if they are images.
@@ -60,21 +62,29 @@ class OneFileKeeper extends BaseObject {
     }
 
     /**
-     * Resize and save image.
+     * Resize and save images.
      * 
      * @param string $path to the file
      * @param string $file
-     * @param array  $sizes of image and catalogs to save variants of image  
+     * @param array  $sizes of images and catalogs to save them
+     * @return mixed queue Id  
      */
     private function resizeSave($path, $file)
     {
-        foreach ($this->sizes as $size) {
+        foreach ($this->sizes as $catalog => $size) {
             if ($size['catalog'] && !is_dir($path . $size['catalog'])) {
                 mkdir($path . $size['catalog'], 0777);
             }
-            
-            Image::resize($path . $file, $size['width'], $size['height'])
-                ->save($path . ($size['catalog'] ? $size['catalog'] . '/' : '') . $file);
+            if ($catalog == 'thumb') {
+                Image::resize($path . $file, $size['width'], $size['height'])
+                    ->save($path . 'thumb/' . $file);
+            } else {
+                Yii::$app->queue->push(new ResizeImageJob([
+                    'path' => $path,
+                    'file' => $file,
+                    'size' => $size,
+                ]));
+            }
         }
     }
 
