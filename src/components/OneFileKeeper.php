@@ -8,7 +8,7 @@ use yii\imagine\Image;
 
 use sergmoro1\uploader\Module;
 use sergmoro1\uploader\models\OneFile;
-use sergmoro1\uploader\components\ResizeImageJob;
+use sergmoro1\uploader\behaviors\ImageTransformationTrait;
 
 /**
  * Class for keeping just uploaded files and resize them if they are images.
@@ -16,6 +16,8 @@ use sergmoro1\uploader\components\ResizeImageJob;
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */
 class OneFileKeeper extends BaseObject {
+    use ImageTransformationTrait;
+    
     /** @var string */
     public $modelClass;
 
@@ -59,33 +61,6 @@ class OneFileKeeper extends BaseObject {
         $this->ext   = mb_strtolower(mb_substr($old, $point));
         
         return uniqid() . $this->ext;
-    }
-
-    /**
-     * Resize and save images.
-     * 
-     * @param string $path to the file
-     * @param string $file
-     * @param array  $sizes of images and catalogs to save them
-     * @return mixed queue Id  
-     */
-    private function resizeSave($path, $file)
-    {
-        foreach ($this->sizes as $catalog => $size) {
-            if ($size['catalog'] && !is_dir($path . $size['catalog'])) {
-                mkdir($path . $size['catalog'], 0777);
-            }
-            if ($catalog == 'thumb') {
-                Image::resize($path . $file, $size['width'], $size['height'])
-                    ->save($path . 'thumb/' . $file);
-            } else {
-                Yii::$app->queue->push(new ResizeImageJob([
-                    'path' => $path,
-                    'file' => $file,
-                    'size' => $size,
-                ]));
-            }
-        }
     }
 
     /**
@@ -167,13 +142,15 @@ class OneFileKeeper extends BaseObject {
                 );
         }
 
-        if (move_uploaded_file($tmp_name, $this->set_path . $new_name)) {
+        $tmp = 'tmp_' . $new_name;
+        if (move_uploaded_file($tmp_name, $this->set_path . $tmp)) {
             if ($is_image) {
-                $this->resizeSave($this->set_path, $new_name);
+                // method from ImageTransformationTrait class
+                $this->resizeSave($this->set_path, $tmp, $new_name);
             }
         } else {
             return $this->err(
-                Module::t('core', 'Temporary file can\'t be moved to file {name}.', ['name' => ($this->set_path . $new_name)])
+                Module::t('core', 'Temporary file can\'t be moved to file {name}.', ['name' => ($this->set_path . $tmp)])
             );
         }
 
