@@ -57,7 +57,7 @@ class OneFileCropper extends BaseObject {
         // crop original and save result to tmp
         Image::crop($this->path . 'original/' . $this->name, $this->w * $scale, $this->h * $scale, $this->start)
             ->save($this->path . $tmp);
-        // resize others using tmp calling method from ImageTransformationTrait class
+        // resize others using $tmp (ImageTransformationTrait::resizeSave())
         $this->resizeSave($this->path, $tmp, $this->name);
 
         return [

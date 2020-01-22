@@ -145,7 +145,7 @@ class OneFileKeeper extends BaseObject {
         $tmp = 'tmp_' . $new_name;
         if (move_uploaded_file($tmp_name, $this->set_path . $tmp)) {
             if ($is_image) {
-                // method from ImageTransformationTrait class
+                // resize image using $tmp (mageTransformationTrait::resizeSave())
                 $this->resizeSave($this->set_path, $tmp, $new_name);
             }
         } else {

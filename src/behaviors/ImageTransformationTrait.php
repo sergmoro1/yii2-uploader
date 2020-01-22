@@ -16,7 +16,7 @@ use sergmoro1\uploader\jobs\DeleteTmpImageJob;
 trait ImageTransformationTrait
 {
     /**
-     * Resize and save image for all sizes using queue.
+     * Resize and save image for all sizes. Using queue if it is active.
      * 
      * @param string $path to the file
      * @param string $tmp image
@@ -26,11 +26,13 @@ trait ImageTransformationTrait
     public function resizeSave($path, $tmp, $file)
     {
         $ids = [];
+        $queueIsActive = isset(Yii::$app->queue);
         foreach ($this->sizes as $catalog => $size) {
-            if ($catalog == 'thumb') {
-                // resize and save thumbnail for returning it in AJAX response
+            if ($catalog == 'thumb' || !$queueIsActive) {
+                // resize and save thumbnail for returning it in AJAX response and
+                // others too if queue is not active
                 Image::resize($path . $tmp, $size['width'], $size['height'])
-                    ->save($path . $catalog . '/' . $file);
+                    ->save($path . ($size['catalog'] ? $size['catalog'] . '/' : '') . $file);
             } else {
                 // resize and save others using queue
                 $ids[] = Yii::$app->queue->push(new ResizeImageJob([
@@ -41,10 +43,16 @@ trait ImageTransformationTrait
                 ]));
             }
         }
-        // delete tmp image after all jobs done
-        Yii::$app->queue->push(new DeleteTmpImageJob([
-            'ids'  => $ids,
-            'file' => ($path . $tmp),
-        ]));
+        // delete tmp image
+        if ($ids) {
+            // after all jobs done in a queue
+            Yii::$app->queue->push(new DeleteTmpImageJob([
+                'ids'  => $ids,
+                'file' => ($path . $tmp),
+            ]));
+        } else {
+            // just after foreach
+            unlink($path . $tmp);
+        }
     }
 }
