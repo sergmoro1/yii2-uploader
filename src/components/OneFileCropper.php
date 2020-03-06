@@ -2,9 +2,9 @@
 
 namespace sergmoro1\uploader\components;
 
-use yii\base\BaseObject;
+use yii\base\Component;
 use yii\imagine\Image;
-use sergmoro1\uploader\behaviors\ImageTransformationTrait;
+use sergmoro1\uploader\behaviors\ImageTransformationBehavior;
 
 /**
  * Class for cropping image uploaded before and resize it for all defined sizes.
@@ -12,9 +12,7 @@ use sergmoro1\uploader\behaviors\ImageTransformationTrait;
  *
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */
-class OneFileCropper extends BaseObject {
-    use ImageTransformationTrait;
-
+class OneFileCropper extends Component {
     /** @var integer sergmoro1\uploader\models\OneFile model ID */
     public $id;
 
@@ -37,6 +35,16 @@ class OneFileCropper extends BaseObject {
     public $sizes;
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            ['class' => ImageTransformationBehavior::className()],
+        ];
+    }
+
+    /**
      * Crop original image according to width, height and start point, risize and save it.
      * 
      * @return array
@@ -57,7 +65,7 @@ class OneFileCropper extends BaseObject {
         // crop original and save result to tmp
         Image::crop($this->path . 'original/' . $this->name, $this->w * $scale, $this->h * $scale, $this->start)
             ->save($this->path . $tmp);
-        // resize others using $tmp (ImageTransformationTrait::resizeSave())
+        // resize others
         $this->resizeSave($this->path, $tmp, $this->name);
 
         return [

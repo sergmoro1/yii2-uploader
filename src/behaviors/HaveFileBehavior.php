@@ -23,34 +23,71 @@ class HaveFileBehavior extends Behavior
     // Popup window border
     const POPUP_BORDER = 35;
 
-    /** @var string main directory where files will be saved, for ex. /files/user */
-    public $file_path;
-    
     // full path will be $base_path . $file_path
     private $base_path;
-    // name of model's files collection
-    private $files = 'files';
     // current file index
     private $current = null;
     // min image size
     private $_min;
     // aspect ratio
     private $_aspectRatio;
-    
+
+    /** 
+     * @var string $absoluteAlias link name
+     * @see $uploaderAlias 
+     */
+    public $absoluteAlias = '@absolute';
+    /**
+     * @var string $uploaderAlias link name
+     * Real name of alias and it's value should be defined in config file, for example in common/config/main-local.php
+     * 
+     * ```php
+     * return [
+     *     'aliases' => [
+     *         '@absolute' => '/home/me/www/site',
+     *         '@uploader' => '/frontend/web/files',
+     *     ],
+     * ```
+     */
+    public $uploaderAlias = '@uploader';
+    /**
+     * @var string $file_path subdirectory where files will be saved, 
+     * for example /user/
+     */
+    public $file_path;
+    /** 
+     * @var array variants of image sizes
+     * where if width & height = 0, then image saved as is
+     * 
+     * ```php
+     * [
+     *   'original'  => ['width' => 2400, 'height' => 1600, 'catalog' => 'original'],
+     *   'main'      => ['width' => 600,  'height' => 400,  'catalog' => ''],
+     *   'thumb'     => ['width' => 120,  'height' => 80,   'catalog' => 'thumb'],
+     * ]
+     * ```
+     * 
+     * All files saved in a folder: Yii::getAlias($uploaderAlias) . $file_path . ($model->id || \sergmoro1\uploader\Uploader::subdir)
+     * For example $uploaderAlias='@uploader' and @uploader defined as '/frontend/web/files', $file_path="/user/" and $subdir by default then 
+     * files will be saved in frontend/web/files/user/53 and subdirectories according sizes:
+     *     frontend/web/files/user/53/thumb
+     *     frontend/web/files/user/53
+     *     frontend/web/files/user/53/original
+     * 
+     * -//- $file_path="/common/" and Uploader::subdir='' then 
+     * files will be saved in frontend/web/files/post and subdirectories according sizes:
+     *     frontend/web/files/common/thumb
+     *     frontend/web/files/common
+     *     frontend/web/files/common/original
+     */
+    public $sizes;
+
     public function init()
     {
         parent::init();
-        // change base path to frontend
-        $this->base_path = Url::base() ? Url::base() : Yii::$app->request->hostInfo;
-        if(isset(Yii::$app->params['before_web'])) 
-            $this->base_path = str_replace(Yii::$app->params['before_web'], 'frontend', $this->base_path);
+        $this->base_path = Yii::getAlias($this->uploaderAlias);
     }
     
-    /**
-     * Set name of files variable
-     */
-    public function setFiles($files) { $this->files = $files; }
-
     /**
      * Add directory separator
      * @param string $subdir
@@ -59,24 +96,28 @@ class HaveFileBehavior extends Behavior
     private function add($subdir) { return $subdir ? $subdir . '/' : ''; }
     
     /**
-     * Get full path to a file.
+     * Get relative path to a file.
      * 
      * @param string $subdir subdirectory in a parent directory - files/post/38, where 38 is a $subdir and a post ID
-     * @param string $catalog files/post/38/thumb or files/post/38/main, thumb, main are catalogs
-     * @param boolean $webroot
+     * @param string $catalog files/post/38/thumb or files/post/38/main where "thumb", "main" are catalogs
      * @return string full file path
     */
-    public function getFilePath($subdir, $catalog = '', $webroot = false)
+    public function getFilePath($subdir, $catalog = '')
     {
-        if(!($app_path = Yii::getAlias('@frontend')))
-            $app_path = Yii::getAlias('@app');
-        $path = ($webroot
-            ? $app_path . '/web'
-            : $this->base_path
-        ) . $this->file_path . $this->add($subdir);
-        return is_dir($app_path . '/web' . $this->file_path . $this->add($subdir) . $catalog) 
-            ? $path . $this->add($catalog) 
-            : $path;
+        return $this->base_path . $this->file_path . $this->add($subdir) . $this->add($catalog);
+    }
+
+
+    /**
+     * Get absolute path to a file.
+     * 
+     * @param string $subdir subdirectory in a parent directory - files/post/38, where 38 is a $subdir
+     * @return string full file path
+    */
+
+    public function getAbsoluteFilePath($subdir)
+    {
+        return Yii::getAlias($this->absoluteAlias) . $this->getFilePath($subdir);
     }
 
     /**
@@ -87,22 +128,33 @@ class HaveFileBehavior extends Behavior
      */
     public function setFilePath($subdir)
     {
-        $path = $this->getFilePath($subdir, '', true);
-        if(is_dir($path))
+        $ok = false;
+        $path = $this->getAbsoluteFilePath($subdir);
+        $ok = is_dir($path) ? true : mkdir($path, 0777);
+        foreach($this->sizes as $size) {
+            if ($size['catalog'] && !is_dir($path . $size['catalog'])) {
+                $ok = mkdir($path . $size['catalog'], 0777);
+            } else
+                continue;
+        }
+        if($ok)
             return $path;
-        elseif(mkdir($path, 0777)) {
-            foreach($this->owner->sizes as $size) {
-                if($size['catalog']) {
-                    if(mkdir($path . $size['catalog'], 0777))
-                        continue;
-                    else
-                        return false;
-                } else
-                    continue;
-            }
-            return $path;
-        } else
+        else
             return false;
+    }
+
+    /**
+     * @return array all files linked with the model
+     */
+    public function getFiles()
+    {
+        return OneFile::find()
+            ->where('parent_id=:parent_id AND model=:model', [
+                ':parent_id' => $this->owner->id,
+                ':model' => $this->owner->className(),
+            ])
+            ->orderBy('created_at')
+            ->all();
     }
 
     /**
@@ -113,8 +165,7 @@ class HaveFileBehavior extends Behavior
     */
     public function getFile($i = 0)
     {
-        $files = $this->files;
-        $files = $this->owner->$files;
+        $files = $this->getFiles();
         if (isset($files[$i])) {
             $this->current = $i;
             return $files[$i];
@@ -131,8 +182,7 @@ class HaveFileBehavior extends Behavior
     */
     public function getFileCount()
     {
-        $files = $this->files;
-        return count($this->owner->$files);
+        return count($this->getFiles());
     }
 
     /**
@@ -145,7 +195,7 @@ class HaveFileBehavior extends Behavior
     {
         if ($file = $this->getFile($i))
         {
-            return $this->getFilePath($file->subdir, '') . $file->name;
+            return $this->getFilePath($file->subdir) . $file->name;
         } else
             return '';
     }
@@ -196,39 +246,6 @@ class HaveFileBehavior extends Behavior
     }
 
     /**
-     * Add full path to a file name
-     * 
-     * @param string $subdir
-     * @param string $catalog in subdir 
-     * @param string file $name 
-     * @return full file name
-    */
-    public function getFileByName($subdir, $catalog = '', $name)
-    {
-        return $this->getFilePath($subdir, $catalog) . $name;
-    }
-
-    /**
-     * Find file by original file name in a $files collection
-     * 
-     * @param string $original file name 
-     * @param string $catalog 
-     * @return full file name
-    */
-    public function getImageByOriginal($catalog = '', $original)
-    {
-        $files = $this->files;
-        foreach($this->owner->$files as $i => $file)
-        {
-            if(!(stripos($file->original, $original) === false)) {
-                $this->current = $i;
-                return $this->getImage($catalog, $i, $files);
-            }
-        }
-        return false;
-    }
-    
-    /**
      * Each file can has some additional vars, description by default.
      * 
      * @param string  var $name
@@ -254,10 +271,10 @@ class HaveFileBehavior extends Behavior
      */
     public function deleteFile($subdir, $file)
     {
-        $path = $this->getFilePath($subdir, '', true);
-        foreach($this->owner->sizes as $size) {
-            if(file_exists($path . $size['catalog'] . '/' . $file))
-                unlink($path . $size['catalog'] . '/' . $file);
+        $path = $this->getAbsoluteFilePath($subdir);
+        foreach($this->sizes as $size) {
+            if(file_exists($path . $this->add($size['catalog']) . $file))
+                unlink($path . $this->add($size['catalog']) . $file);
         }
     }
 
@@ -270,8 +287,8 @@ class HaveFileBehavior extends Behavior
     {
         if ($this->_min)
             return $this->_min;
-        $mw = isset($this->owner->sizes['main']['width']) ? $this->owner->sizes['main']['width'] : 0;
-        $mh = isset($this->owner->sizes['main']['height']) ? $this->owner->sizes['main']['height'] : 0;
+        $mw = isset($this->sizes['main']['width']) ? $this->sizes['main']['width'] : 0;
+        $mh = isset($this->sizes['main']['height']) ? $this->sizes['main']['height'] : 0;
         $this->_min = min($mw, $mh); 
         return $this->_min;
     }
@@ -283,8 +300,8 @@ class HaveFileBehavior extends Behavior
      */
     public function getPopUpWidth()
     {
-        return (isset($this->owner->sizes['main']['width']) 
-            ? $this->owner->sizes['main']['width']
+        return (isset($this->sizes['main']['width']) 
+            ? $this->sizes['main']['width']
             : self::MIN_SIZE
         ) + self::POPUP_BORDER;
     }
@@ -298,9 +315,9 @@ class HaveFileBehavior extends Behavior
     {
         if ($this->_aspectRatio)
             return $this->_aspectRatio;
-        $this->_aspectRatio = isset($this->owner->sizes['main']['width']) && 
-            isset($this->owner->sizes['main']['height']) && $this->owner->sizes['main']['height'] > 0 
-            ? $this->owner->sizes['main']['width'] / $this->owner->sizes['main']['height']
+        $this->_aspectRatio = isset($this->sizes['main']['width']) && 
+            isset($this->sizes['main']['height']) && $this->sizes['main']['height'] > 0 
+            ? $this->sizes['main']['width'] / $this->sizes['main']['height']
             : self::ASPECT_RATIO;
         return $this->_aspectRatio;
     }

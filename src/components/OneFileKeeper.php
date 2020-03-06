@@ -3,21 +3,19 @@
 namespace sergmoro1\uploader\components;
 
 use Yii;
-use yii\base\BaseObject;
+use yii\base\Component;
 use yii\imagine\Image;
 
 use sergmoro1\uploader\Module;
 use sergmoro1\uploader\models\OneFile;
-use sergmoro1\uploader\behaviors\ImageTransformationTrait;
+use sergmoro1\uploader\behaviors\ImageTransformationBehavior;
 
 /**
  * Class for keeping just uploaded files and resize them if they are images.
  *
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */
-class OneFileKeeper extends BaseObject {
-    use ImageTransformationTrait;
-    
+class OneFileKeeper extends Component {
     /** @var string */
     public $modelClass;
 
@@ -49,6 +47,16 @@ class OneFileKeeper extends BaseObject {
     private $ext;
     
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            ['class' => ImageTransformationBehavior::className()],
+        ];
+    }
+    
+    /**
      * Get new unique name of file with the same extension as $old.
      * 
      * @param string $old
@@ -78,6 +86,29 @@ class OneFileKeeper extends BaseObject {
         ];
     }
     
+    /**
+     * Move uploaded file from source to dest.
+     * 
+     * @param string $source file path and name
+     * @param string $dest file path and name
+     * @return boolean
+     */
+    public function move($source, $dest)
+    {
+        return move_uploaded_file($source, $dest);
+    }
+
+    /**
+     * Sculpt model.
+     * 
+     * @param array $config
+     * @return \sergmoro1\uploader\models\OneFile
+     */
+    public function sculpt($config)
+    {
+        return new OneFile($config);
+    }
+
     /**
      * Resizing and keeping uploaded file. Save information about uploaded file.
      * 
@@ -112,7 +143,7 @@ class OneFileKeeper extends BaseObject {
             return $this->err(Module::t('core', 'Too many files uploaded. Allowed {max}.', ['max' => $this->limit]));
 
         // check allowed types
-        if (!($this->allowedTypesReg && preg_match($this->allowedTypesReg, $file_type)))
+        if ($this->allowedTypesReg && preg_match($this->allowedTypesReg, $file_type) == 0)
             return $this->err(
                 Module::t('core', 'File type {type} is not allowed.', ['type' => $file_type])
             );
@@ -143,19 +174,23 @@ class OneFileKeeper extends BaseObject {
         }
 
         $tmp = 'tmp_' . $new_name;
-        if (move_uploaded_file($tmp_name, $this->set_path . $tmp)) {
+        if ($this->move($tmp_name, $this->set_path . $tmp)) {
             if ($is_image) {
-                // resize image using $tmp (mageTransformationTrait::resizeSave())
+                // resize image
                 $this->resizeSave($this->set_path, $tmp, $new_name);
             }
         } else {
             return $this->err(
-                Module::t('core', 'Temporary file can\'t be moved to file {name}.', ['name' => ($this->set_path . $tmp)])
+                Module::t('core', 'Temporary file {source} can\'t be moved to file {target}.', [
+                    'source' => ($tmp_name),
+                    'target' => ($this->set_path . $tmp),
+                ])
             );
         }
 
+        
         // add new record to OneFile model
-        $oneFile = new OneFile([
+        $oneFile = $this->sculpt([
             'model'     => $this->modelClass,
             'parent_id' => $this->parent_id,
             'original'  => $name,
@@ -164,7 +199,6 @@ class OneFileKeeper extends BaseObject {
             'type'      => $file_type,
             'size'      => $file_size,
         ]);
-        $oneFile->translit();
         
         // save information about just uploaded file to the model 
         if ($oneFile->save()) {

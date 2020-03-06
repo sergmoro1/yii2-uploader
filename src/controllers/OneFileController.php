@@ -83,7 +83,7 @@ class OneFileController extends Controller {
             
             $oneFileCropper = new OneFileCropper([
                 'id'    => $id,
-                'path'  => $model->getFilePath($oneFile->subdir, '', true),
+                'path'  => $model->getAbsoluteFilePath($oneFile->subdir),
                 'name'  => $oneFile->name,
                 'w'     => $w,
                 'h'     => $h,
@@ -161,8 +161,8 @@ class OneFileController extends Controller {
      * Swap rows with file information.
      * 
      * POST params:
-     * @param integer $b
-     * @param integer $a files ids that should be swapped with each other
+     * @param integer $a
+     * @param integer $b files ids that should be swapped with each other
      */
     public function actionSwap()
     {

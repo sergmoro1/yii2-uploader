@@ -2,6 +2,7 @@ Yii2 module for image|file upload
 =================================
 
 Multiple uploading, sorting file collection by mouse, adding description for the file, cropping.
+Resize images using the queue component.
 
 Demo
 ----
@@ -17,52 +18,32 @@ A common approach for working with uploading images or files in an application.
 If the model needs images or files, it is enough:
 
 * to connect the behavior, 
-* determine the subdirectory in which they will be stored, 
-* define the desired image sizes and 
-* the method that receives the files for the model.
+* define the subdirectory in which they will be stored, 
+* define the desired image sizes
 
 For example `common\models\User.php`
 
 ```php
-namespace common\models;
-
 use sergmoro1\uploader\behaviors\HaveFileBehavior;
-use sergmoro1\uploader\models\OneFile;
 
 class User extends ActiveRecord
 {
-    // sizes and subdirs of uploaded images
-    public $sizes = [
-        'original' => ['width' => 1200, 'height' => 1200, 'catalog' => 'original'],
-        'main'     => ['width' => 400,  'height' => 400, 'catalog' => ''],
-        'thumb'    => ['width' => 90,   'height' => 90,  'catalog' => 'thumb'],
-    ];
-
     /**
      * @inheritdoc
      */
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            'have-file' => [
+            [
                 'class' => HaveFileBehavior::className(),
-                'file_path' => '/files/user/',
+                'file_path' => '/user/',
+                'sizes' => [
+                    'original' => ['width' => 1200, 'height' => 1200, 'catalog' => 'original'],
+                    'main'     => ['width' => 400,  'height' => 400,  'catalog' => ''],
+                    'thumb'    => ['width' => 90,   'height' => 90,   'catalog' => 'thumb'],
+                ],
             ],
         ]);
-    }
-
-    /**
-     * @return array all files linked with the model
-     */
-    public function getFiles()
-    {
-        return OneFile::find()
-            ->where('parent_id=:parent_id AND model=:model', [
-                ':parent_id' => $this->id,
-                ':model' => 'common\models\User',
-            ])
-            ->orderBy('created_at')
-            ->all();
     }
 }
 ```
@@ -73,16 +54,29 @@ Directories
 Information about all uploaded files are stored in one table `onefile`. 
 There is no need to define a field of type `file` in the model, which need files.
 
-The files are uploaded and stored in the directory `frontend/web/files`. 
-For each model subdirectories are possible. For example `frontend/web/files/user`.
- 
-In the subdirectory the files are arranged by users and sizes.
+The files are uploaded and stored in the directory defined as a concatenation of paths of two aliases @uploader and @absolute.
+Both aleases should be defined in appropriate config file. For example in `common/config/main-local.php` 
+if storage folder are the same for `backend` and `fronend`.
 
-* `frontend/web/files/user/2`
-* `frontend/web/files/user/2/thumb`
-* `frontend/web/files/user/2/original`
+```php
+return [
+    'aliases' => [
+        '@absolute' => '/home/my/site',
+        '@uploader' => '/frontend/web/files',
+    ],
+```
 
-Where `2` is the user ID.
+But there may be different configurations.
+
+In the folder the files are arranged by users and sizes.
+
+* `/frontend/web/files/user/2`
+* `/frontend/web/files/user/2/thumb`
+* `/frontend/web/files/user/2/original`
+
+Where `2` is the user ID or `subdir`.
+`subdir` can be blank, then all files will be saved in one folder.
+`subdir` can be defined when widget placed in a view. 
 
 Sizes in an example are `thumb`, `main`, `original`.
 More sizes can be defined but those are `must have`.
@@ -98,7 +92,7 @@ Either run
 
 or add
 
-`"sergmoro1/yii2-uploader": "^1.1"`
+`"sergmoro1/yii2-uploader": "^2.0"`
 
 to the require section of your composer.json.
 
@@ -110,28 +104,47 @@ If you used a previous version `sergmoro1\yii2-byone-uploader` then run only the
 
 `php yii migrate --migrationPath=@vendor/sergmoro1/yii2-uploader/src/migrations/v1`
 
+If migrations with `namespace` are used then add to `console/config/main.php`.
+
+```php
+    'controllerNamespace' => 'console\controllers',
+    'controllerMap' => [
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => null,
+            'migrationNamespaces' => [
+                'sergmoro1\uploader\migrations',
+            ],
+        ],
+    ],
+```
+and run `php yii migrate`.
+
 Configuration
 -------------
 
-To register the module in an app `common/config/main.php`.
+To register the module in an app `common/config/main.php` (advanced) or in appropriate config file.
 
 ```php
-'modules' => [
-    'uploader' => [
-        'class' => 'sergmoro1\uploader\Module',
-    ],
+    'modules' => [
+        'uploader' => [
+            'class' => 'sergmoro1\uploader\Module',
+        ],
 ```
 
-If `advanced` template is used then `before_web` parameter should be defined. For example `backend\config\params.php`
+For file storage configuration in `common/config/main-local.php` or any other config file add 
+lines appropriate for your app.
 
 ```php
 return [
-    'before_web' => 'backend',
-    ...
-];
+    'aliases' => [
+        '@absolute' => '/home/my/site',
+        '@uploader' => '/frontend/web/files',
+    ],
 ```
 
-For `frontend` or `basic` template no needed.
+If [queue](https://www.yiiframework.com/extension/yiisoft/yii2-queue/doc/guide/2.0/ru/usage) should be using for image resizing, 
+then `queue` component must be defined. The name of the queue component must be exactly `queue`.
 
 Usage
 -----
@@ -153,12 +166,10 @@ while ($image) {
 }
 ```
 
-To do uploading place the widget in a form or any other view, for example `backend/views/user/_form.php`.
+To do uploading place the widget in a `_form.php` or any other view.
 
 ```
-use sergmoro1\uploader\widgets\Uploader;
-
-    <?= Uploader::widget([
+    <?= \sergmoro1\uploader\widgets\Uploader::widget([
         'model'       => $model,
         'draggable'   => true,
         'cropAllowed' => true,
@@ -170,10 +181,20 @@ If image should be cropped, subdirectories `original`, `main`, `thumb` must to b
 
 May be uploaded any amount of files for one model but files amount can be limited by `limit` parameter of the widget.
 
+If `subdir` will be defined as an empty string then all files will be uploaded in the same folder but with subfolders
+that was defined in `sizes`.
+
+```
+    <?= Uploader::widget([
+        'model'       => $model,
+        'subdir'      => '',
+    ]) ?>
+```
+
 Description of uploaded files
 -----------------------------
 
-You can leave descriptions to the files. To do this in the form `backend/views/user/_form.php` (for example),
+You can leave descriptions to the files. To do this in the `_form.php`,
 in the already mentioned widget, you need to add the parameter `appendeixView`.
 
 ```php
@@ -184,8 +205,7 @@ in the already mentioned widget, you need to add the parameter `appendeixView`.
   ]) ?>
 ```
 
-And add view `backend/views/user/appendix.php`
-the following content:
+And add to the view`/views/user/appendix.php` the following content:
 
 ```html
 <span id='description'>
@@ -200,7 +220,7 @@ Options
 
 **cropAllowed** (`false`)
 
-If image should be cropped, `original`, `main`, `thumb` sizes must be defined in `$sizes` array of the model.
+If image should be cropped, `original`, `main`, `thumb` sizes must be defined.
 
 The cropping sizes are specified by the main directory where `catalor` parameter should be equal `''`.
 
@@ -208,24 +228,11 @@ If this directory is set to square, then the remaining sizes will be square afte
 
 **draggable** (`false`)
 
-If uploaded files should be swapped then in a getter `getFiles()` rows must be sorted by `created_at`. 
-
-```php
-public function getFiles()
-{
-    return OneFile::find()
-        ->where('parent_id=:parent_id AND model=:model', [
-            ':parent_id' => $this->id,
-            ':model' => 'common\models\User',
-        ])
-        ->orderBy('created_at')
-        ->all();
-}
-```
+Make `true` if uploaded files should be swapped. 
 
 **allowedTypes** ( `[]` )
 
-To control files types on client side, `['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png', 'image/gif', 'image/x-gif']`.
+To control files types on a client side, `['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png', 'image/gif', 'image/x-gif']`.
 Any if empty.
 
 **allowedTypesReg** ( `'/image\\/[jpeg|jpg|png|gif]/i'` )
@@ -234,7 +241,7 @@ Server side control. Any if empty. Preferable way to check allowed types to uplo
 
 **appendixView** ( `''` )
 
-View file name of additional fields for uploaded files. For ex. `'/user/appendix'`. 
+View file name of additional fields for uploaded files. 
 See [views/user/appendix.php](https://github.com/sergmoro1/yii2-user/blob/master/src/views/user/appendix.php).
 
 **minFileSize** ( `0` )
@@ -251,4 +258,8 @@ Maximum amount of files to upload for one model. `0` for any.
 
 **secure** ( `true` )
 
-Ordinary extension require user authorization, but verification may be switched off.
+Ordinary user authorization required, but verification may be switched off.
+
+**subdir** ( `null` )
+
+If `null` (by defauld) `$model->id` will be used.

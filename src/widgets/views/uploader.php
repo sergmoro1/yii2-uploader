@@ -7,6 +7,12 @@ use yii\bootstrap\Modal;
  * Input field for files uploading, cropping popup area,
  * results of uploading with buttons.
  * 
+ * @var yii\db\ActiveRecord $model
+ * @var array $btns 
+ * @var boolean $cropAllowed 
+ * @var string $fileinput name of a file field
+ * @var string $$appendixView additional variables definition
+ * 
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */
 ?>
@@ -15,7 +21,7 @@ use yii\bootstrap\Modal;
     <label class='control-label'>
         <?= $btns['choose']['label']; ?>
     </label>
-    <p><?= \Yii::t('core', 'After saving you will be able to upload images or other files.') ?></p>
+    <p><?= Yii::t('core', 'After saving you will be able to upload images or other files.') ?></p>
 <?php else: ?>
 
     <?php Modal::begin([
@@ -69,14 +75,14 @@ use yii\bootstrap\Modal;
                 <?php if($draggable): ?>
                     <div class='text-right'>
                         <?= Yii::t('core', 'Sort') ?>
-                        <a href='#' title='<?= \Yii::t('core', 'Rows can be sorted - click, hold, drag.') ?>'>
+                        <a href='#' title='<?= Yii::t('core', 'Rows can be sorted - click, hold, drag.') ?>'>
                             <span class='glyphicon glyphicon-question-sign'></span>
                         </a>
                     </div>
                 <?php endif; ?>
                 <ul class='table' <?= $draggable ? 'id="sortable"' : '' ?>>
                 <!-- table with files/images already uploaded at the time the form load -->
-                <?php foreach($model->$files as $i => $file): ?>
+                <?php foreach($model->files as $i => $file): ?>
                     <li id='<?php echo $file->id; ?>'>
                         <?php if($model->isImage($file->type)): ?>
                             <!-- image -->
@@ -87,13 +93,13 @@ use yii\bootstrap\Modal;
                                         <?= Html::a($btns['crop']['caption'], false, [
                                             'id'    => ('btn-crop'), 
                                             'class' => $btns['crop']['class'],
-                                            'title' => \Yii::t('core', 'Crop'),
+                                            'title' => Yii::t('core', 'Crop'),
                                         ]) ?>
                                     <?php endif; ?>
                                     <?= Html::a($btns['view']['caption'], false, [
                                         'id'    => ('btn-view'), 
                                         'class' => $btns['view']['class'],
-                                        'title' => \Yii::t('core', 'View'),
+                                        'title' => Yii::t('core', 'View'),
                                     ]) ?>
                                 </div>
                             </span>
@@ -118,7 +124,7 @@ use yii\bootstrap\Modal;
                                     <?= Html::a($btns[$btn]['caption'], false, [
                                         'id'    => ('btn-' . $btn), 
                                         'class' => ($btns[$btn]['class'] . ($visible ? '' : ' hidden')),
-                                        'title' => \Yii::t('core', $btn),
+                                        'title' => Yii::t('core', $btn),
                                     ]) ?>
                                 <?php endforeach; ?>
                             <?php endif; ?>

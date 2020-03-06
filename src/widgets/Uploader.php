@@ -24,8 +24,6 @@ class Uploader extends Widget {
     public $name = 'fileinput';
     /** $var yii\db\ActiveRecord $model connected with uploader */
     public $model;
-    /** @var string $files relation name by default, for OneFile model, you can change it on your own */
-    public $files = 'files';
     /** @var boolean $secure actions for sergmoro1\uploader\controllers\OneFileController or not */
     public $secure = true;
     /** @var boolean $draggable line of uploaded files or not */
@@ -50,7 +48,12 @@ class Uploader extends Widget {
     public $limit = 0;
     /** @var integer $maxFileSize in bytes */
     public $maxFileSize = null;
-    /** @var array $allowedTypes allowed mime types used on client side */
+    /** @var array $allowedTypes allowed mime types used on client side
+     * 
+     * ```php
+     * ['image/jpeg', 'image/png']
+     * ```
+     */
     public $allowedTypes = [];
     
     // additional settings
@@ -262,7 +265,6 @@ class Uploader extends Widget {
         return $this->render('uploader', [
             'fileinput'     => $this->name,
             'model'         => $this->model,
-            'files'         => $this->files,
             'btns'          => $this->btns,
             'cropAllowed'   => $this->cropAllowed,
             'draggable'     => $this->draggable,

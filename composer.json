@@ -1,6 +1,6 @@
 {
     "name": "sergmoro1/yii2-uploader",
-    "description": "File uploader. Upload multiple files at once. Resize and Crop images. Any size available. Sorting by mouse. Control the max number of uploaded files. File description. Easy setup, quick start.",
+    "description": "File uploader. Upload multiple files at once. Fast Resize and Crop images in a queue. Any size available. Sorting by mouse. Control the max number of uploaded files. File description. Easy setup, quick start.",
     "keywords": [
         "yii2",
         "file", "image", "multiple",

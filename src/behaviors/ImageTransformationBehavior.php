@@ -3,17 +3,18 @@
 namespace sergmoro1\uploader\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 use yii\imagine\Image;
 
 use sergmoro1\uploader\jobs\ResizeImageJob;
 use sergmoro1\uploader\jobs\DeleteTmpImageJob;
 
 /**
- * Image transformations.
+ * Image transformations behavior.
  * 
  * @author - Sergey Morozov <sergmoro1@ya.ru>
  */
-trait ImageTransformationTrait
+class ImageTransformationBehavior extends Behavior
 {
     /**
      * Resize and save image for all sizes. Using queue if it is active.
@@ -27,7 +28,7 @@ trait ImageTransformationTrait
     {
         $ids = [];
         $queueIsActive = isset(Yii::$app->queue);
-        foreach ($this->sizes as $catalog => $size) {
+        foreach ($this->owner->sizes as $catalog => $size) {
             if ($catalog == 'thumb' || !$queueIsActive) {
                 // resize and save thumbnail for returning it in AJAX response and
                 // others too if queue is not active

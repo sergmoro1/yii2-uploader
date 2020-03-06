@@ -23,6 +23,7 @@ class OneFile extends ActiveRecord
      * @property integer $parent_id
      * @property string  $name
      * @property string  $original
+     * @property string  $subdir
      * @property string  $type
      * @property string  $size
      * @property text    $defs
@@ -66,7 +67,7 @@ class OneFile extends ActiveRecord
             [['parent_id', 'size'], 'integer'],
             [['model', 'original', 'type'], 'string', 'max' => 256],
             ['name', 'string', 'max' => 32],
-            [['defs', 'created_at', 'updated_at'], 'safe'],
+            [['subdir', 'defs', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -97,6 +98,8 @@ class OneFile extends ActiveRecord
     {
         if(parent::beforeSave($insert))
         {
+            if ($insert)
+                $this->translit();
             // save additional vars
             $this->defs = json_encode($this->vars);
             return true;
