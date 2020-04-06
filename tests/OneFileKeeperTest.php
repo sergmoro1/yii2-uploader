@@ -7,7 +7,7 @@
 
 namespace tests;
 
-use tests\mock\OneFileKeeperTrait;
+use tests\fixtures\OneFileKeeperTrait;
 use tests\models\Photo;
 
 class OneFileKeeperTest extends \PHPUnit\Framework\TestCase

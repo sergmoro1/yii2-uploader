@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-namespace tests\mock;
+namespace tests\fixtures;
 
 use tests\components\OneFileKeeper;
 use tests\models\Photo;

@@ -5,7 +5,7 @@ namespace tests\models;
 use yii\base\Model;
 
 /**
- * Mock class for sergmoro1\uploader\models\OneFile.
+ * Mock class for testing sergmoro1\uploader\models\OneFile.
  *
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */

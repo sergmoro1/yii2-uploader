@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-namespace tests\mock;
+namespace tests\fixtures;
 
 use tests\models\Photo;
 use sergmoro1\uploader\components\OneFileCropper;

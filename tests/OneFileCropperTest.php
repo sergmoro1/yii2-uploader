@@ -8,8 +8,8 @@
 namespace tests;
 
 use yii\imagine\Image;
-use tests\mock\OneFileKeeperTrait;
-use tests\mock\OneFileCropperTrait;
+use tests\fixtures\OneFileKeeperTrait;
+use tests\fixtures\OneFileCropperTrait;
 use tests\models\Photo;
 
 class OneFileCropperTest extends \PHPUnit\Framework\TestCase

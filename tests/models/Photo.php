@@ -4,10 +4,10 @@ namespace tests\models;
 
 use Yii;
 use yii\base\Model;
-use tests\mock\HaveFileBehavior;
+use tests\fixtures\HaveFileBehavior;
 
 /**
- * Mock class for yii\db\ActiveRecord.
+ * Mock class for testing yii\db\ActiveRecord.
  *
  * @author Sergey Morozov <sergmoro1@ya.ru>
  */
