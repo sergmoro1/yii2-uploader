@@ -5,8 +5,7 @@ namespace sergmoro1\uploader\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-
-use sergmoro1\rukit\behaviors\TransliteratorBehavior;
+use yii\behaviors\SluggableBehavior;
 
 /**
  * OneFile model class.
@@ -33,6 +32,8 @@ class OneFile extends ActiveRecord
 
     /** @var object $vars decoded from json array $model->defs */
     public $vars;
+    /** @var string $slug */
+    public $slug;
 
     /**
      * @return string the associated database table name
@@ -50,9 +51,9 @@ class OneFile extends ActiveRecord
         return [
             ['class' => TimestampBehavior::className()],
             [
-                'class' => TransliteratorBehavior::className(),
-                'from'  => 'original',
-                'to'    => 'original',
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'original',
+                'slugAttribute' => 'original',
             ],
          ];
     }
@@ -98,8 +99,11 @@ class OneFile extends ActiveRecord
     {
         if(parent::beforeSave($insert))
         {
-            if ($insert)
-                $this->translit();
+            if ($insert) {
+                // '.' was replaced to '-' when uploaded, so it should be replaced back
+                $dash = strrpos($this->original, '-');
+                $this->original = substr($this->original, 0, $dash) . '.' . substr($this->original, $dash + 1);
+            }
             // save additional vars
             $this->defs = json_encode($this->vars);
             return true;

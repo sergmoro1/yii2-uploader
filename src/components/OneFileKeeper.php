@@ -45,6 +45,7 @@ class OneFileKeeper extends Component {
     public $alreadyUploaded;
 
     private $ext;
+    private $old;
     
     /**
      * @inheritdoc
@@ -59,16 +60,19 @@ class OneFileKeeper extends Component {
     /**
      * Get new unique name of file with the same extension as $old.
      * 
-     * @param string $old
+     * @param string $old original file name
      * @return string
      */
     private function getNewName($old) {
         mb_internal_encoding('UTF-8');
         
         $point = mb_strrpos($old, '.');
-        $this->ext   = mb_strtolower(mb_substr($old, $point));
+        $old = mb_strtolower($old);
+        $this->ext = mb_substr($old, $point + 1);
+        // @see sergmoro1\uploader\models\OneFile
+        $this->old = mb_substr($old, 0, $point) . '-' . $this->ext;
         
-        return uniqid() . $this->ext;
+        return uniqid() . '.' . $this->ext;
     }
 
     /**
@@ -193,7 +197,7 @@ class OneFileKeeper extends Component {
         $oneFile = $this->sculpt([
             'model'     => $this->modelClass,
             'parent_id' => $this->parent_id,
-            'original'  => $name,
+            'original'  => $this->old,
             'name'      => $new_name,
             'subdir'    => $this->subdir,
             'type'      => $file_type,

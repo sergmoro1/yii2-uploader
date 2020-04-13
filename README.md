@@ -92,7 +92,7 @@ Either run
 
 or add
 
-`"sergmoro1/yii2-uploader": "^2.0"`
+`"sergmoro1/yii2-uploader": "^2.0.0"`
 
 to the require section of your composer.json.
 
@@ -138,7 +138,7 @@ lines appropriate for your app.
 ```php
 return [
     'aliases' => [
-        '@absolute' => '/home/my/site',
+        '@absolute' => 'https://my-site.ru',
         '@uploader' => '/frontend/web/files',
     ],
 ```
