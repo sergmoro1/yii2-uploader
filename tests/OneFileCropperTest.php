@@ -17,16 +17,16 @@ class OneFileCropperTest extends \PHPUnit\Framework\TestCase
     use OneFileKeeperTrait;
     use OneFileCropperTrait;
     
-    protected $subdir = '';
+    public $subdir = '';
+    public $name = 'image.jpg';
     protected $fileinput = 'fileinput';
-    protected $file = 'image.jpg';
     
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $file = $this->file;
+        $file = $this->name;
         $fileinput = $this->fileinput; 
         $_FILES[$fileinput]['name'] = $file;
         $_FILES[$fileinput]['tmp_name'] = (__DIR__ . '/data/tmp/' . $file);
@@ -43,7 +43,9 @@ class OneFileCropperTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $model = new Photo(['id' => 1, 'category' => 'Street']);
-        $model->deleteFile($this->subdir, $this->file);
+        $model->deleteFile($this);
+        rmdir(__DIR__ . '/data/files/photo/original');
+        rmdir(__DIR__ . '/data/files/photo/thumb');
     }
     
     /**
@@ -62,7 +64,7 @@ class OneFileCropperTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->keeper->proceed($this->fileinput);
         $this->assertSame($result['success'], true);
-        $this->file = $result['file']['name'];
+        $this->name = $result['file']['name'];
 
         $cropper = $this->makeCropper($result['file']['name']);
         $result = $cropper->proceed();

@@ -114,7 +114,7 @@ class OneFileController extends Controller {
             $modelClass = $oneFile->model;
             $model      = $modelClass::findOne($oneFile->parent_id);
             // delete file and all of it sizes
-            $model->deleteFile($oneFile->subdir, $oneFile->name);
+            $model->deleteFile($oneFile);
             // delete information about file
             $result = [
                 'success'  => $oneFile->delete(),

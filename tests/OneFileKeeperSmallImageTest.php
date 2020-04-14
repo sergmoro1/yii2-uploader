@@ -14,8 +14,9 @@ class OneFileKeeperSmallImageTest extends \PHPUnit\Framework\TestCase
 {
     use OneFileKeeperTrait;
     
+    public $subdir = '';
+    public $name = 'image_small.jpg';
     protected $keeper;
-    protected $subdir = '';
     protected $fileinput = 'fileinput';
     
     /**
@@ -23,7 +24,7 @@ class OneFileKeeperSmallImageTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $file = 'image_small.jpg';
+        $file = $this->name;
         $fileinput = $this->fileinput; 
         $_FILES[$fileinput]['name'] = $file;
         $_FILES[$fileinput]['tmp_name'] = (__DIR__ . '/data/tmp/' . $file);
@@ -32,6 +33,15 @@ class OneFileKeeperSmallImageTest extends \PHPUnit\Framework\TestCase
         $_FILES[$fileinput]['error'] = UPLOAD_ERR_OK;
 
         $this->keeper = $this->makeKeeper();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $model = new Photo(['id' => 1, 'category' => 'Street']);
+        $model->deleteFile($this);
     }
 
     /**

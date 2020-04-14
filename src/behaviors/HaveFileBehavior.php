@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Behavior;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\base\NotSupportedException;
+use yii\helpers\FileHelper;
 use sergmoro1\uploader\models\OneFile;
 
 /**
@@ -81,13 +81,29 @@ class HaveFileBehavior extends Behavior
      *     frontend/web/files/common/original
      */
     public $sizes;
+    
+    private $dir_to_delete;
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
         $this->base_path = Yii::getAlias($this->uploaderAlias);
     }
     
+    /**
+     * @inheritdoc
+     */
+    public function events()
+    {
+        return [
+            // delete all associated files
+            \yii\db\ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
+        ];
+    }
+
     /**
      * Add directory separator
      * @param string $subdir
@@ -121,7 +137,7 @@ class HaveFileBehavior extends Behavior
     }
 
     /**
-     * If path exists return path else make it. 
+     * If subdirectory exists return path else make it with catalogs
      * 
      * @param $subdir - subdirectory
      * @return string | false
@@ -130,17 +146,15 @@ class HaveFileBehavior extends Behavior
     {
         $ok = false;
         $path = $this->getAbsoluteFilePath($subdir);
-        $ok = is_dir($path) ? true : mkdir($path, 0777);
-        foreach($this->sizes as $size) {
-            if ($size['catalog'] && !is_dir($path . $size['catalog'])) {
-                $ok = mkdir($path . $size['catalog'], 0777);
-            } else
-                continue;
+        if ($ok = is_dir($path) ? true : FileHelper::createDirectory($path)) {
+            foreach($this->sizes as $size) {
+                if ($size['catalog'] && !is_dir($path . $size['catalog'])) {
+                    $ok = FileHelper::createDirectory($path . $size['catalog']);
+                } else
+                    continue;
+            }
         }
-        if($ok)
-            return $path;
-        else
-            return false;
+        return $ok ? $path : false;
     }
 
     /**
@@ -151,7 +165,7 @@ class HaveFileBehavior extends Behavior
         return OneFile::find()
             ->where('parent_id=:parent_id AND model=:model', [
                 ':parent_id' => $this->owner->id,
-                ':model' => $this->owner->className(),
+                ':model'     => $this->owner->className(),
             ])
             ->orderBy('created_at')
             ->all();
@@ -264,18 +278,38 @@ class HaveFileBehavior extends Behavior
     public function getFileDescription() { return $this->getVar(); }
 
     /**
-     * Delete file and all resized images in catalogs if exist.
+     * Delete file and all resized images in catalogs if exist
      * 
-     * @param string $subdir
-     * @param string $file name
+     * @param sergmoro1\uploader\models\OneFile $file
+     * @return boolean
      */
-    public function deleteFile($subdir, $file)
+    public function deleteFile($file)
     {
-        $path = $this->getAbsoluteFilePath($subdir);
+        $success = true;
+        $path = $this->getAbsoluteFilePath($file->subdir);
+        if (!$this->dir_to_delete)
+            $this->dir_to_delete = $path;
         foreach($this->sizes as $size) {
-            if(file_exists($path . $this->add($size['catalog']) . $file))
-                unlink($path . $this->add($size['catalog']) . $file);
+            $path_file = $path . $this->add($size['catalog']) . $file->name;
+            if(file_exists($path_file))
+                $success = FileHelper::unlink($path_file);
         }
+        return $success;
+    }
+
+    /**
+     * Delete all files associated with an owner model
+     * 
+     * @param yii\base\Event $event
+     */
+    public function afterDelete($event)
+    {
+        foreach ($this->getFiles() as $file) {
+            if ($this->deleteFile($file))
+                $file->delete();
+        }
+        FileHelper::removeDirectory($this->dir_to_delete);
+        $this->dir_to_delete = null;
     }
 
     /**
