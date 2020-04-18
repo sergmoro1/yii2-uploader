@@ -138,7 +138,7 @@ lines appropriate for your app.
 ```php
 return [
     'aliases' => [
-        '@absolute' => 'https://my-site.ru',
+        '@absolute' => '/home/my/site',
         '@uploader' => '/frontend/web/files',
     ],
 ```
