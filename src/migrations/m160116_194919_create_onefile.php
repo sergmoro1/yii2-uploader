@@ -1,12 +1,10 @@
 <?php
-namespace sergmoro1\uploader\migrations;
 
-use yii\db\Schema;
 use yii\db\Migration;
 
 class m160116_194919_create_onefile extends Migration
 {
-    const TABLE_ONEFILE = '{{%onefile}}';
+    const TABLE = '{{%onefile}}';
     
     public function up()
     {
@@ -16,14 +14,14 @@ class m160116_194919_create_onefile extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable(self::TABLE_ONEFILE, [
+        $this->createTable(self::TABLE, [
             'id'            => $this->primaryKey(),
-            'model'         => $this->string(256)->notNull(),
+            'model'         => $this->string()->notNull(),
             'parent_id'     => $this->integer()->notNull(),
-            'original'      => $this->string(256)->notNull(),
+            'original'      => $this->string()->notNull(),
             'name'          => $this->string(32)->notNull(),
-            'subdir'        => $this->string(256)->notNull(),
-            'type'          => $this->string(256)->notNull(),
+            'subdir'        => $this->string()->notNull(),
+            'type'          => $this->string()->notNull(),
             'size'          => $this->integer()->notNull(),
             'defs'          => $this->text(),
             
@@ -31,21 +29,21 @@ class m160116_194919_create_onefile extends Migration
             'updated_at'    => $this->integer(),
         ], $tableOptions);
 
-        $this->createIndex('idx-model-parent', self::TABLE_ONEFILE, ['model', 'parent_id']);
+        $this->createIndex('idx-onefile-model-parent', self::TABLE, ['model', 'parent_id']);
 
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'model',     'Model namespace');
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'parent_id', 'Model ID');
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'original',  'Translited file name');
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'type',      'Mime type');
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'size',      'Size');
+        $this->addCommentOnColumn(self::TABLE, 'model',     'Model class name');
+        $this->addCommentOnColumn(self::TABLE, 'parent_id', 'Parent model ID');
+        $this->addCommentOnColumn(self::TABLE, 'original',  'Translited file name');
+        $this->addCommentOnColumn(self::TABLE, 'type',      'Mime type');
+        $this->addCommentOnColumn(self::TABLE, 'size',      'Size');
 
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'name',      'Generated unique file name');
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'subdir',    'Subdirectory in a model directory, may be various from model to model or the same');
-        $this->addCommentOnColumn(self::TABLE_ONEFILE, 'defs',      'Additional variables linked with file are saved as json array');
+        $this->addCommentOnColumn(self::TABLE, 'name',      'Generated unique file name');
+        $this->addCommentOnColumn(self::TABLE, 'subdir',    'Subdirectory in a model directory, may be various from model to model or the same');
+        $this->addCommentOnColumn(self::TABLE, 'defs',      'Additional variables linked with file are saved as json array');
     }
 
     public function down()
     {
-        $this->dropTable(self::TABLE_ONEFILE);
+        $this->dropTable(self::TABLE);
     }
 }

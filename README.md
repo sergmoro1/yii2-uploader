@@ -104,22 +104,6 @@ If you used a previous version `sergmoro1\yii2-byone-uploader` then run only the
 
 `php yii migrate --migrationPath=@vendor/sergmoro1/yii2-uploader/src/migrations/v1`
 
-If migrations with `namespace` are used then add to `console/config/main.php`.
-
-```php
-    'controllerNamespace' => 'console\controllers',
-    'controllerMap' => [
-        'migrate' => [
-            'class' => 'yii\console\controllers\MigrateController',
-            'migrationPath' => null,
-            'migrationNamespaces' => [
-                'sergmoro1\uploader\migrations',
-            ],
-        ],
-    ],
-```
-and run `php yii migrate`.
-
 Configuration
 -------------
 
@@ -138,7 +122,7 @@ lines appropriate for your app.
 ```php
 return [
     'aliases' => [
-        '@absolute' => 'https://my-site.ru',
+        '@absolute' => '/home/my/site',
         '@uploader' => '/frontend/web/files',
     ],
 ```
