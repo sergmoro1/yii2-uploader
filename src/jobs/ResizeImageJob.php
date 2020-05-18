@@ -22,11 +22,13 @@ class ResizeImageJob extends BaseObject implements \yii\queue\JobInterface
     public $size;
 
     /**
-     * Resize and save image.
+     * Resize and save image if sizes > 0 or simply copy.
      */
     public function execute($queue)
     {
-        Image::resize($this->path . $this->tmp, $this->size['width'], $this->size['height'])
-            ->save($this->path . ($this->size['catalog'] ? $this->size['catalog'] . '/' : '') . $this->file);
+        $image = ($this->size['width'] > 0 && $this->size['height'] > 0)
+            ? Image::resize($this->path . $this->tmp, $this->size['width'], $this->size['height'])
+            : Image::open($this->path . $this->tmp);
+        $image->save($this->path . ($this->size['catalog'] ? $this->size['catalog'] . '/' : '') . $this->file);
     }
 }

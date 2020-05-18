@@ -33,6 +33,8 @@ class OneFileKeeper extends Component {
     /** @var array $sizes of images */
     public $sizes;
 
+    /** @var boolean $check_wh is necessary */
+    public $check_wh;
     /** @var string RegExp */
     public $allowedTypesReg;
     /** @var integer */
@@ -162,7 +164,7 @@ class OneFileKeeper extends Component {
             );
 
         // check min width and height of Image
-        if ($is_image) {
+        if ($is_image && $this->check_wh) {
             $image = Image::getImagine()->open($tmp_name);
             $image_size = $image->getSize();
             $width = $this->sizes['main']['width'];

@@ -29,11 +29,14 @@ class ImageTransformationBehavior extends Behavior
         $ids = [];
         $queueIsActive = isset(Yii::$app->queue);
         foreach ($this->owner->sizes as $catalog => $size) {
+            // resize and save thumbnail for returning it in AJAX response and
+            // others too if queue is not active
             if ($catalog == 'thumb' || !$queueIsActive) {
-                // resize and save thumbnail for returning it in AJAX response and
-                // others too if queue is not active
-                Image::resize($path . $tmp, $size['width'], $size['height'])
-                    ->save($path . ($size['catalog'] ? $size['catalog'] . '/' : '') . $file);
+                // $sizes > 0 then resize or simply copy
+                $image = ($size['width'] > 0 && $size['height'] > 0)
+                    ? Image::resize($path . $tmp, $size['width'], $size['height'])
+                    : Image::open($path . $tmp);
+                $image->save($path . ($size['catalog'] ? $size['catalog'] . '/' : '') . $file);
             } else {
                 // resize and save others using queue
                 $ids[] = Yii::$app->queue->push(new ResizeImageJob([

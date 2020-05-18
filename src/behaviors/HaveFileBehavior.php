@@ -31,6 +31,8 @@ class HaveFileBehavior extends Behavior
     private $_min;
     // aspect ratio
     private $_aspectRatio;
+    // temp var to delete files with subdirs
+    private $dir_to_delete;
 
     /** 
      * @var string $absoluteAlias link name
@@ -81,9 +83,17 @@ class HaveFileBehavior extends Behavior
      *     frontend/web/files/common/original
      */
     public $sizes;
+    /**
+     * @var boolean is checking of image size is necessary
+     * After the image is uploaded, the minimum width and height can be checked.
+     * The values are used for checking
+     * ```php
+     * $sizes['main']['width']
+     * $sizes['main']['height']
+     * ```
+     */
+    public $check_wh = true;
     
-    private $dir_to_delete;
-
     /**
      * @inheritdoc
      */

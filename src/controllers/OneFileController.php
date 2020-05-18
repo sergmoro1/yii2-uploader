@@ -49,6 +49,7 @@ class OneFileController extends Controller {
                 'parent_id'       => $post['parent_id'],
                 'subdir'          => $post['subdir'],
                 'sizes'           => $model->sizes,
+                'check_wh'        => $model->check_wh,
                 'allowedTypesReg' => $post['allowedTypesReg'],
                 'minFileSize'     => $post['minFileSize'],
                 'maxFileSize'     => $post['maxFileSize'],
