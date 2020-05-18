@@ -37,7 +37,9 @@ class User extends ActiveRecord
             [
                 'class' => HaveFileBehavior::className(),
                 'file_path' => '/user/',
+                //'check_wh' => false, // not checking min width and height of image
                 'sizes' => [
+                    //'original' => ['width' => 0, 'height' => 0, 'catalog' => 'original'], // zero values mean not resize
                     'original' => ['width' => 1200, 'height' => 1200, 'catalog' => 'original'],
                     'main'     => ['width' => 400,  'height' => 400,  'catalog' => ''],
                     'thumb'    => ['width' => 90,   'height' => 90,   'catalog' => 'thumb'],
@@ -199,8 +201,8 @@ And add to the view`/views/user/appendix.php` the following content:
 
 Field `description` defined by default, but fields not limited.
 
-Options
--------
+Widget options
+--------------
 
 **cropAllowed** (`false`)
 
