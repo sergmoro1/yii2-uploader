@@ -105,6 +105,17 @@ class HaveFileBehavior extends Behavior
     }
 
     /**
+     * Get sizes.
+     * 
+     * @return array
+    */
+
+    public static function getSizes()
+    {
+        return $this->sizes;
+    }
+
+    /**
      * Add directory separator
      * @param string $subdir
      * @return string $subdir with final slash
@@ -142,7 +153,7 @@ class HaveFileBehavior extends Behavior
      * @param $subdir - subdirectory
      * @return string | false
      */
-    public function setFilePath($subdir)
+    public static function setFilePath($subdir)
     {
         $ok = false;
         $path = $this->getAbsoluteFilePath($subdir);
