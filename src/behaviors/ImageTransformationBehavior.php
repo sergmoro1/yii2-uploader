@@ -33,10 +33,12 @@ class ImageTransformationBehavior extends Behavior
             // others too if queue is not active
             if ($catalog == 'thumb' || !$queueIsActive) {
                 // $sizes > 0 then resize or simply copy
-                $image = ($size['width'] > 0 && $size['height'] > 0)
-                    ? Image::resize($path . $tmp, $size['width'], $size['height'])
-                    : Image::open($path . $tmp);
-                $image->save($path . ($size['catalog'] ? $size['catalog'] . '/' : '') . $file);
+                if ($size['width'] > 0 && $size['height'] > 0)
+                    Image::resize($path . $tmp, $size['width'], $size['height'])
+                        ->save($path . ($size['catalog'] ? $size['catalog'] . '/' : '') . $file);
+                else 
+                    copy($path . $tmp,
+                        $path . ($size['catalog'] ? $size['catalog'] . '/' : '') . $file);
             } else {
                 // resize and save others using queue
                 $ids[] = Yii::$app->queue->push(new ResizeImageJob([

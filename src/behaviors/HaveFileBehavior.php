@@ -163,7 +163,7 @@ class HaveFileBehavior extends Behavior
      * @param $subdir - subdirectory
      * @return string | false
      */
-    public static function setFilePath($subdir)
+    public function setFilePath($subdir)
     {
         $ok = false;
         $path = $this->getAbsoluteFilePath($subdir);
