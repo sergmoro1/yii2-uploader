@@ -56,25 +56,29 @@ Directories
 Information about all uploaded files are stored in one table `onefile`. 
 There is no need to define a field of type `file` in the model, which need files.
 
-The files are uploaded and stored in the directory defined as a concatenation of paths of two aliases @uploader and @absolute.
-Both aleases should be defined in appropriate config file. For example in `common/config/main-local.php` 
+The files are uploaded and stored in the directory defined as a concatenation of paths of three aliases @absolute, @host and @uploader.
+All aleases should be defined in appropriate config file. For example in `common/config/main-local.php` 
 if storage folder are the same for `backend` and `fronend`.
 
 ```php
 return [
     'aliases' => [
         '@absolute' => '/home/my/site',
-        '@uploader' => '/frontend/web/files',
+        '@host'     => 'http://example.ru',
+        '@uploader' => '/uploads',
     ],
 ```
 
 But there may be different configurations.
 
+If both the backend and frontend are on the same host, the @host alias can be leaved empty.
+The same case for [basic Yii template](https://github.com/yiisoft/yii2-app-basic).
+
 In the folder the files are arranged by users and sizes.
 
-* `/frontend/web/files/user/2`
-* `/frontend/web/files/user/2/thumb`
-* `/frontend/web/files/user/2/original`
+* `/uploads/user/2`
+* `/uploads/user/2/thumb`
+* `/uploads/user/2/original`
 
 Where `2` is the user ID or `subdir`.
 `subdir` can be blank, then all files will be saved in one folder.
@@ -125,7 +129,8 @@ lines appropriate for your app.
 return [
     'aliases' => [
         '@absolute' => '/home/my/site',
-        '@uploader' => '/frontend/web/files',
+        '@host'     => '',
+        '@uploader' => '/uploads',
     ],
 ```
 

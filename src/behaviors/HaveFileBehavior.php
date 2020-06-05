@@ -39,6 +39,11 @@ class HaveFileBehavior extends Behavior
      * @see $uploaderAlias 
      */
     public $absoluteAlias = '@absolute';
+    /** 
+     * @var string $hostAlias link name
+     * @see $uploaderAlias 
+     */
+    public $hostAlias = '@host';
     /**
      * @var string $uploaderAlias link name
      * Real name of alias and it's value should be defined in config file, for example in common/config/main-local.php
@@ -47,7 +52,8 @@ class HaveFileBehavior extends Behavior
      * return [
      *     'aliases' => [
      *         '@absolute' => '/home/me/www/site',
-     *         '@uploader' => '/frontend/web/files',
+     *         '@host'     => 'https://example.ru',
+     *         '@uploader' => '/uploads',
      *     ],
      * ```
      */
@@ -100,7 +106,7 @@ class HaveFileBehavior extends Behavior
     public function init()
     {
         parent::init();
-        $this->base_path = Yii::getAlias($this->uploaderAlias);
+        $this->base_path = Yii::getAlias($this->hostAlias) . Yii::getAlias($this->uploaderAlias);
     }
     
     /**
