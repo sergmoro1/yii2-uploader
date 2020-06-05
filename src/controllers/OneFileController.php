@@ -43,7 +43,7 @@ class OneFileController extends Controller {
             $model = $modelClass::findOne($post['parent_id']);
 
             $oneFileKeeper = new OneFileKeeper([
-                'get_path'        => $model->getFilePath($post['subdir']),
+                'get_path'        => $model->getFilePath($post['subdir'], '', true),
                 'set_path'        => $model->setFilePath($post['subdir']),
                 'modelClass'      => $modelClass,
                 'parent_id'       => $post['parent_id'],
