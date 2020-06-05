@@ -106,7 +106,7 @@ class HaveFileBehavior extends Behavior
     public function init()
     {
         parent::init();
-        $this->base_path = Yii::getAlias($this->hostAlias) . Yii::getAlias($this->uploaderAlias);
+        $this->base_path = Yii::getAlias($this->uploaderAlias);
     }
     
     /**
@@ -143,11 +143,13 @@ class HaveFileBehavior extends Behavior
      * 
      * @param string $subdir subdirectory in a parent directory - files/post/38, where 38 is a $subdir and a post ID
      * @param string $catalog files/post/38/thumb or files/post/38/main where "thumb", "main" are catalogs
+     * @param boolean $add_host to file path or not
      * @return string full file path
     */
-    public function getFilePath($subdir, $catalog = '')
+    public function getFilePath($subdir, $catalog = '', $add_host = false)
     {
-        return $this->base_path . $this->file_path . $this->add($subdir) . $this->add($catalog);
+        return ($add_host ? Yii::getAlias($this->hostAlias) : '') . 
+            $this->base_path . $this->file_path . $this->add($subdir) . $this->add($catalog);
     }
 
 
@@ -236,7 +238,7 @@ class HaveFileBehavior extends Behavior
     {
         if ($file = $this->getFile($i))
         {
-            return $this->getFilePath($file->subdir) . $file->name;
+            return $this->getFilePath($file->subdir, '', true) . $file->name;
         } else
             return '';
     }
@@ -261,7 +263,7 @@ class HaveFileBehavior extends Behavior
         if ($file = $this->getFile($i))
         {
             if ($this->isImage($file->type))
-                return $this->getFilePath($file->subdir, $catalog) . $file->name;
+                return $this->getFilePath($file->subdir, $catalog, true) . $file->name;
             else
                 return false;
         } else
